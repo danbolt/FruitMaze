@@ -10,6 +10,10 @@ var Player = function(game, x, y, gamepad, index, keyboard) {
   this.gamepad = gamepad;
   this.keyboard = keyboard;
 
+  this.index = index;
+
+  this.holdingFruit = false;
+
   game.add.existing(this);
 };
 
@@ -55,4 +59,7 @@ Player.prototype.directionalMove = function () {
         this.body.velocity.y = 0;
       }
   }
+};
+Player.prototype.holdFruit = function() {
+  this.holdingFruit = true;
 };

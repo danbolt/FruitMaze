@@ -59,18 +59,21 @@ Gameplay.prototype.create = function()
 
   this.players = this.game.add.group();
 
-  var player1 = new Player(this.game, 128 + 16, 128 + 48, this.game.input.gamepad.pad1, 0, undefined);
+  var player1 = new Player(this.game, 512 + 16, 512 + 48 - 64, this.game.input.gamepad.pad1, 0, undefined);
   //var player1 = new Player(this.game, 128 + 16, 128 + 48, undefined, 0, this.game.input.keyboard);
   this.players.addChild(player1);
+  this.players.addToHash(player1);
 
   this.kamis = this.game.add.group();
 
   var kami1 = new Kami(this.game, 256, 256, 0);
   this.kamis.addChild(kami1);
+  this.kamis.addToHash(kami1);
 
   this.fruits = this.game.add.group();
   var fruit1 = new Fruit(this.game, 512 + 32, 512 + 32);
   this.fruits.addChild(fruit1);
+  this.fruits.addToHash(fruit1);
 
   this.map = this.game.add.tilemap();
   this.map.addTilesetImage('tiles', undefined, TILE_SIZE, TILE_SIZE);
@@ -102,6 +105,32 @@ Gameplay.prototype.update = function()
   this.timeCountdown.text = this.timer.timeLeft;
 
   this.game.physics.arcade.collide(this.players, this.wallTiles);
+
+  this.game.physics.arcade.overlap(this.players, this.fruits, this.pickUpFruit, this.checkPickUpFruit, this);
+  this.game.physics.arcade.overlap(this.players, this.kamis, null, this.playerCollidesKami, this);
+};
+Gameplay.prototype.checkPickUpFruit = function(player)
+{
+  return player.holdingFruit === false;
+};
+Gameplay.prototype.pickUpFruit = function (player, fruit)
+{
+  fruit.kill();
+  player.holdFruit();
+};
+Gameplay.prototype.playerCollidesKami = function(player, kami)
+{
+  if (player.index === kami.index) {
+    if (player.holdingFruit === true) {
+      player.holdingFruit = false;
+
+      console.log('player game fruit!');
+    }
+  } else {
+    player.kill();
+  }
+
+  return false;
 };
 
 var main = function() {
