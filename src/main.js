@@ -29,6 +29,7 @@ var Gameplay = function() {};
 Gameplay.prototype.init = function()
 {
   this.players = null;
+  this.kamis = null;
 
   this.map = null;
   this.wallTiles = null
@@ -43,8 +44,6 @@ Gameplay.prototype.init = function()
 };
 Gameplay.prototype.create = function()
 {
-  this.players = this.game.add.group();
-
   var fullScreenKey = this.game.input.keyboard.addKey(Phaser.KeyCode.ESC);
   fullScreenKey.onUp.add(function () {
     if (this.game.scale.isFullScreen)
@@ -57,8 +56,15 @@ Gameplay.prototype.create = function()
     }
   }, this);
 
+  this.players = this.game.add.group();
+
   var player1 = new Player(this.game, 128 + 16, 128 + 48, this.game.input.gamepad.pad1, 0);
   this.players.addChild(player1);
+
+  this.kamis = this.game.add.group();
+
+  var kami1 = new Kami(this.game, 256, 256, 0);
+  this.kamis.addChild(kami1);
 
   this.map = this.game.add.tilemap();
   this.map.addTilesetImage('tiles', undefined, TILE_SIZE, TILE_SIZE, 0, 8);
@@ -81,6 +87,7 @@ Gameplay.prototype.create = function()
   this.timeCountdown = this.game.add.text(32, GAME_SCREEN_HEIGHT + 32, this.timer.timeLeft, {fill: 'white'});
 
   // Ordering hacks
+  this.game.world.bringToTop(this.kamis);
   this.game.world.bringToTop(this.players);
 };
 Gameplay.prototype.update = function()
