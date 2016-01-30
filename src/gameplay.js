@@ -1,6 +1,9 @@
 var Gameplay = function() {};
 Gameplay.prototype.init = function(playerInputData)
 {
+  this.states = ['PREGAME', 'ACTION', 'GAMEOVER'];
+  this.currentState = this.states[2];
+
   this.players = null;
   this.kamis = null;
   this.fruits = null;
@@ -34,6 +37,8 @@ Gameplay.prototype.create = function()
         this.game.scale.startFullScreen(false);
     }
   }, this);
+
+  this.currentState = this.states[0];
 
   this.players = this.game.add.group();
   this.kamis = this.game.add.group();
@@ -74,8 +79,9 @@ Gameplay.prototype.create = function()
 
   this.timer = new RoundTimer(this.game, function () { this.model.refreshMaze(); }, this);
   this.timer.resetTimer();
+  this.timer.pauseTimer();
 
-  this.scores = new GameScores(this.game, this.playerInputData.length, function(index) { console.log('player ' + (index + 1) + ' wins!'); }, this);
+  this.scores = new GameScores(this.game, this.playerInputData.length, this.playerWins, this);
 
   // init UI
   this.timeCountdown = this.game.add.text(32, GAME_SCREEN_HEIGHT + 32, this.timer.timeLeft, {fill: 'white'});
@@ -90,6 +96,18 @@ Gameplay.prototype.create = function()
   this.game.world.bringToTop(this.fruits);
   this.game.world.bringToTop(this.players);
   this.game.world.bringToTop(this.kamis);
+
+  this.players.forEach(function (p) { p.lockMovement = true; }, this);
+  var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, 'READY?', {fill: 'white', font: '128px Arial'});
+  startText.align = 'center';
+  startText.anchor.x = 0.5;
+  startText.cacheAsBitmap = true;
+  var startGameEvent = this.game.time.events.add(1000, function () {
+    this.players.forEach(function (p) { p.lockMovement = false; }, this);
+    startText.text = 'GO!'
+    this.timer.unpauseTimer();
+    this.game.time.events.add(750, function () { startText.destroy(); } );
+  }, this);
 };
 Gameplay.prototype.update = function()
 {
@@ -111,12 +129,12 @@ Gameplay.prototype.update = function()
 
 // game logic helpers
 Gameplay.prototype.spawnFruit = function() {
-  var randX = ~~(Math.random() * MAP_WIDTH * 0.7 + MAP_WIDTH * 0.15);
-  var randY = ~~(Math.random() * MAP_HEIGHT * 0.7 + MAP_HEIGHT * 0.15);
+  var randX = ~~(Math.random() * MAP_WIDTH * 0.8 + MAP_WIDTH * 0.1);
+  var randY = ~~(Math.random() * MAP_HEIGHT * 0.8 + MAP_HEIGHT * 0.1);
   var randTile = this.map.getTile(randX, randY, this.wallTiles);
   while (randTile !== null) {
-    randX = ~~(Math.random() * MAP_WIDTH * 0.7 + MAP_WIDTH * 0.15);
-    randY = ~~(Math.random() * MAP_HEIGHT * 0.7 + MAP_HEIGHT * 0.15);
+    randX = ~~(Math.random() * MAP_WIDTH * 0.8 + MAP_WIDTH * 0.1);
+    randY = ~~(Math.random() * MAP_HEIGHT * 0.8 + MAP_HEIGHT * 0.1);
     randTile = this.map.getTile(randX, randY, this.wallTiles);
   }
 
@@ -126,6 +144,14 @@ Gameplay.prototype.spawnFruit = function() {
     newFruit.x = randX * 32 + 16;
     newFruit.y = randY * 32 + 16;
   }
+};
+Gameplay.prototype.playerWins = function(index) {
+  var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, 'PLAYER ' + (index + 1) + ' WINS!', {fill: 'white', font: '110px Arial'});
+  startText.align = 'center';
+  startText.anchor.x = 0.5;
+
+  this.timer.pauseTimer();
+  this.players.forEach(function (p) { p.lockMovement = true; }, this);
 };
 
 // Collision detection callbacks

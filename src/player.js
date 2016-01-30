@@ -27,6 +27,8 @@ var Player = function(game, x, y, gamepad, index) {
     }
   }, this);
 
+  this.lockMovement = false;
+
   game.add.existing(this);
 };
 
@@ -37,6 +39,11 @@ Player.prototype.update = function() {
   this.directionalMove();
 };
 Player.prototype.directionalMove = function () {
+  if (this.lockMovement === true) {
+    this.body.velocity.set(0);
+    return;
+  }
+
   if (this.gamepad) {
     if (this.gamepad.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || this.gamepad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1) {
       this.body.velocity.x = -1 * PLAYER_MOVE_SPEED;
