@@ -2,6 +2,8 @@ var Preload = function() {};
 Preload.prototype.preload = function()
 {
   this.game.load.image('tiles', 'asset/img/tiles.png');
+
+  this.game.load.spritesheet('tiles_s', 'asset/img/tiles.png', 32, 32);
 };
 Preload.prototype.create = function()
 {
@@ -25,6 +27,8 @@ Preload.prototype.create = function()
 var Gameplay = function() {};
 Gameplay.prototype.init = function()
 {
+  this.players = null;
+
   this.map = null;
   this.wallTiles = null
   this.floorTiles = null;
@@ -38,11 +42,15 @@ Gameplay.prototype.init = function()
 };
 Gameplay.prototype.create = function()
 {
+  this.player = new Player(this.game, 100, 100, this.game.input.gamepad.pad1, 0);
+
   this.map = this.game.add.tilemap();
   this.map.addTilesetImage('tiles');
 
   this.wallTiles = this.map.create('walls', MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, TILE_SIZE);
   this.wallTiles.resizeWorld();
+
+  this.map.setCollisionBetween(0, 63);
 
   this.model = new GraphModel(this.game, this.map, this.wallTiles);
   this.model.refreshMaze();
@@ -52,10 +60,15 @@ Gameplay.prototype.create = function()
 
   // init UI
   this.timeCountdown = this.game.add.text(32, 32, this.timer.timeLeft, {fill: 'white'});
+
+  // Ordering hacks
+  this.game.world.bringToTop(this.player);
 };
 Gameplay.prototype.update = function()
 {
   this.timeCountdown.text = this.timer.timeLeft;
+
+  this.game.physics.arcade.collide(this.player, this.wallTiles);
 };
 
 var main = function() {
