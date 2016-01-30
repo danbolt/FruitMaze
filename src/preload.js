@@ -23,5 +23,5 @@ Preload.prototype.create = function()
 
   this.game.input.gamepad.start();  
 
-  this.game.state.start('Gameplay', true, false, [this.game.input.gamepad.pad1, this.game.input.keyboard, this.game.input.gamepad.pad2, this.game.input.gamepad.pad2]);
+  this.game.state.start('Gameplay', true, false, [this.game.input.gamepad.pad1, this.game.input.keyboard/*, this.game.input.gamepad.pad2, this.game.input.gamepad.pad2*/]);
 };

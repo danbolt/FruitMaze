@@ -44,11 +44,11 @@ Gameplay.prototype.create = function()
   this.kamis = this.game.add.group();
 
   for (var i = 0; i < this.playerInputData.length; i++) {
-    var player1 = new Player(this.game, 512 + 16 + (i * 64), 512 + 48 - 64, this.playerInputData[i], i, undefined);
+    var player1 = new Player(this.game, (i === 0 || i === 3) ? GAME_SCREEN_WIDTH - 128 : 128, (i === 0 || i === 2) ? 128 : GAME_SCREEN_HEIGHT - 128, this.playerInputData[i], i, undefined);
     this.players.addChild(player1);
     this.players.addToHash(player1);
 
-    var kami1 = new Kami(this.game, Math.random() * GAME_SCREEN_WIDTH * 0.5 + GAME_SCREEN_WIDTH * 0.25, Math.random() * GAME_SCREEN_HEIGHT * 0.5 + GAME_SCREEN_HEIGHT * 0.25, i);
+    var kami1 = new Kami(this.game, (i === 0 || i === 3) ? GAME_SCREEN_WIDTH - 256 : 256, (i === 0 || i === 2) ? 192 : GAME_SCREEN_HEIGHT - 192, i);
     this.kamis.addChild(kami1);
     this.kamis.addToHash(kami1);
     kami1.tint = DEBUG_TINTS[i];
