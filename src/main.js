@@ -9,6 +9,7 @@ Preload.prototype.create = function()
 {
   this.game.stage.backgroundColor = '#222222';
 
+  this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
   this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
   this.game.scale.refresh();
 
@@ -43,11 +44,27 @@ Gameplay.prototype.init = function()
 Gameplay.prototype.create = function()
 {
   this.players = this.game.add.group();
+
+  var fullScreenKey = this.game.input.keyboard.addKey(Phaser.KeyCode.ESC);
+  fullScreenKey.onUp.add(function () {
+    if (this.game.scale.isFullScreen)
+    {
+        this.game.scale.stopFullScreen();
+    }
+    else
+    {
+        this.game.scale.startFullScreen(false);
+    }
+  }, this);
+
   var player1 = new Player(this.game, 128 + 16, 128 + 48, this.game.input.gamepad.pad1, 0);
   this.players.addChild(player1);
 
   this.map = this.game.add.tilemap();
-  this.map.addTilesetImage('tiles');
+  this.map.addTilesetImage('tiles', undefined, TILE_SIZE, TILE_SIZE, 0, 8);
+
+  this.floorTiles = this.map.create('floors', MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, TILE_SIZE);
+  this.map.fill(1, 0, 0, MAP_WIDTH, MAP_HEIGHT, this.floorTiles);
 
   this.wallTiles = this.map.create('walls', MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, TILE_SIZE);
   this.wallTiles.resizeWorld();

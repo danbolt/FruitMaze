@@ -71,36 +71,36 @@ GraphModel.prototype.fillWalls = function() {
   {
     for (var j = 0; j < MATRIX_HEIGHT; j++)
     {
-      this.map.putTile(14, i * ROOM_WIDTH, j * ROOM_HEIGHT, 0);
+      this.map.putTile(0, i * ROOM_WIDTH, j * ROOM_HEIGHT, this.wallLayer);
 
       // place horizontal gaps
       if (this.checkEdge(i, j, i + 1, j) === false) {
-        this.map.putTile(5, i * ROOM_WIDTH + 1, j * ROOM_HEIGHT, 0);
+        this.map.putTile(0, i * ROOM_WIDTH + 1, j * ROOM_HEIGHT, this.wallLayer);
       }
       else {
-        this.map.removeTile(i * ROOM_WIDTH + 1, j * ROOM_HEIGHT, 0);
+        this.map.removeTile(i * ROOM_WIDTH + 1, j * ROOM_HEIGHT, this.wallLayer);
       }
 
       if (this.checkEdge(i, j, i - 1, j) === false) {
-        this.map.putTile(5, i * ROOM_WIDTH - 1, j * ROOM_HEIGHT, 0);
+        this.map.putTile(0, i * ROOM_WIDTH - 1, j * ROOM_HEIGHT, this.wallLayer);
       }
       else {
-        this.map.removeTile(i * ROOM_WIDTH - 1, j * ROOM_HEIGHT, 0);
+        this.map.removeTile(i * ROOM_WIDTH - 1, j * ROOM_HEIGHT, this.wallLayer);
       }
 
       // place vertical gaps
       if (this.checkEdge(i, j, i, j + 1) === false) {
-        this.map.putTile(5, i * ROOM_WIDTH, j * ROOM_HEIGHT + 1, 0);
+        this.map.putTile(0, i * ROOM_WIDTH, j * ROOM_HEIGHT + 1, this.wallLayer);
       }
       else {
-        this.map.removeTile(i * ROOM_WIDTH, j * ROOM_HEIGHT + 1, 0);
+        this.map.removeTile(i * ROOM_WIDTH, j * ROOM_HEIGHT + 1, this.wallLayer);
       }
 
       if (this.checkEdge(i, j, i, j - 1) === false) {
-        this.map.putTile(5, i * ROOM_WIDTH, j * ROOM_HEIGHT - 1, 0);
+        this.map.putTile(0, i * ROOM_WIDTH, j * ROOM_HEIGHT - 1, this.wallLayer);
       }
       else {
-        this.map.removeTile(i * ROOM_WIDTH, j * ROOM_HEIGHT - 1, 0);
+        this.map.removeTile(i * ROOM_WIDTH, j * ROOM_HEIGHT - 1, this.wallLayer);
       }
     }
   }
@@ -128,7 +128,7 @@ GraphModel.prototype.fillWalls = function() {
           var roll = ~~(Math.random() * candidates.length);
           var candidate = candidates[roll];
 
-          this.map.removeTile(i + candidate.x, j + candidate.y, 0);
+          this.map.removeTile(i + candidate.x, j + candidate.y, this.wallLayer);
         }
       }
     }
