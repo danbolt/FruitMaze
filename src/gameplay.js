@@ -1,5 +1,5 @@
 var Gameplay = function() {};
-Gameplay.prototype.init = function()
+Gameplay.prototype.init = function(playerInputData)
 {
   this.players = null;
   this.kamis = null;
@@ -13,6 +13,8 @@ Gameplay.prototype.init = function()
 
   this.timer = null;
   this.scores = null;
+
+  this.playerInputData = playerInputData;
 
   // UI-related stuff
   this.timeCountdown = null;
@@ -32,17 +34,19 @@ Gameplay.prototype.create = function()
   }, this);
 
   this.players = this.game.add.group();
-
-  var player1 = new Player(this.game, 512 + 16, 512 + 48 - 64, this.game.input.gamepad.pad1, 0, undefined);
-  //var player1 = new Player(this.game, 128 + 16, 128 + 48, undefined, 0, this.game.input.keyboard);
-  this.players.addChild(player1);
-  this.players.addToHash(player1);
-
   this.kamis = this.game.add.group();
 
-  var kami1 = new Kami(this.game, 256, 256, 0);
-  this.kamis.addChild(kami1);
-  this.kamis.addToHash(kami1);
+  for (var i = 0; i < this.playerInputData.length; i++) {
+    var player1 = new Player(this.game, 512 + 16 + (i * 64), 512 + 48 - 64, this.playerInputData[i], i, undefined);
+    this.players.addChild(player1);
+    this.players.addToHash(player1);
+    player1.tint = DEBUG_TINTS[i];
+
+    var kami1 = new Kami(this.game, Math.random() * GAME_SCREEN_WIDTH * 0.5 + GAME_SCREEN_WIDTH * 0.25, Math.random() * GAME_SCREEN_HEIGHT * 0.5 + GAME_SCREEN_HEIGHT * 0.25, i);
+    this.kamis.addChild(kami1);
+    this.kamis.addToHash(kami1);
+    kami1.tint = DEBUG_TINTS[i];
+  }
 
   this.fruits = this.game.add.group();
   for (var i = 0; i < 5; i++) {
@@ -109,7 +113,7 @@ Gameplay.prototype.spawnFruit = function(x, y) {
     newFruit.x = x * 32;
     newFruit.y = y * 32;
   }
-}
+};
 
 // Collision detection callbacks
 Gameplay.prototype.checkPickUpFruit = function(player)

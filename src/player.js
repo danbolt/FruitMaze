@@ -1,14 +1,20 @@
 var PLAYER_MOVE_SPEED = 300;
 
-var Player = function(game, x, y, gamepad, index, keyboard) {
+var Player = function(game, x, y, gamepad, index) {
   Phaser.Sprite.call(this, game, x, y, 'tiles_s', 0);
   this.anchor.set(0.5, 0.75);
 
   this.game.physics.arcade.enable(this);
   this.body.setSize(16, 16);
 
-  this.gamepad = gamepad;
-  this.keyboard = keyboard;
+  if (gamepad instanceof Phaser.SinglePad)
+  {
+    this.gamepad = gamepad;
+  }
+  else
+  {
+    this.keyboard = gamepad;
+  }
 
   this.index = index;
 
