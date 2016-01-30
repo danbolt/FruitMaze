@@ -28,6 +28,8 @@ Gameplay.prototype.init = function()
   this.map = null;
   this.wallTiles = null
   this.floorTiles = null;
+
+  this.model = null;
 };
 Gameplay.prototype.create = function()
 {
@@ -37,20 +39,22 @@ Gameplay.prototype.create = function()
   this.wallTiles = this.map.create('walls', MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, TILE_SIZE);
   this.wallTiles.resizeWorld();
 
-  for (var i = 0; i < MAP_WIDTH; i++)
-  {
-    for (var j = 0; j < MAP_HEIGHT; j++)
-    {
-      if (i % 2 === 0) this.map.putTile(9, i, j, 0);
-    }
-  }
+  this.model = new GraphModel(this.game, this.map, this.wallTiles);
+  this.model.randomizeEdges();
+  this.model.fillWalls();
+
+  this.game.input.onTap.add(function () {
+    this.model = new GraphModel(this.game, this.map, this.wallTiles);
+    this.model.randomizeEdges();
+    this.model.fillWalls();
+  }, this);
 };
 Gameplay.prototype.update = function()
 {
 };
 
 var main = function() {
-  var game = new Phaser.Game(960, 768);
+  var game = new Phaser.Game(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
 
   game.state.add('Preload', Preload, false);
   game.state.add('Gameplay', Gameplay, false);
