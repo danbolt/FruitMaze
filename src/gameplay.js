@@ -237,6 +237,16 @@ Gameplay.prototype.playerCollidesKami = function(player, kami)
       player.holding.kill();
       player.holding = undefined;
       this.scores.playerEarnsScore(player.index);
+
+      var oldLifespan = this.labrynthEmitter.lifespan;
+      this.labrynthEmitter.lifespan = 555;
+      for (var i = 0; i < 10; i++)
+      {
+        this.labrynthEmitter.setXSpeed(300 * Math.cos(i / 10 * Math.PI * 2), 300 * Math.cos(i / 10 * Math.PI * 2));
+        this.labrynthEmitter.setYSpeed(300 * Math.sin(i / 10 * Math.PI * 2), 300 * Math.sin(i / 10 * Math.PI * 2));
+        this.labrynthEmitter.emitParticle(player.x, player.y, 'particles', 2);
+      }
+      this.labrynthEmitter.lifespan = oldLifespan;
     }
   } else {
     player.defeat();
