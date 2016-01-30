@@ -174,13 +174,15 @@ Gameplay.prototype.spawnFruit = function() {
   }
 };
 Gameplay.prototype.playerWins = function(index) {
-  var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, 'PLAYER ' + (index + 1) + ' WINS!', {fill: 'white', font: '110px Arial'});
+  var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, 'PLAYER ' + (index + 1) + ' WINS!', {fill: 'white', font: '96px Arial'});
   startText.align = 'center';
   startText.anchor.x = 0.5;
 
   this.timer.pauseTimer();
   this.kamis.forEach(function (k) { k.lockMovement = true; }, this);
   this.players.forEach(function (p) { p.lockMovement = true; }, this);
+
+  this.game.time.events.add(5000, function () { this.game.state.start('TitleScreen'); }, this);
 };
 
 // particle effects for map changes

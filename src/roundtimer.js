@@ -1,5 +1,5 @@
 var ROUND_TIME = 60; //seconds
-var TIME_PER_LABRYNTH_SWITCH = 10;
+var TIME_PER_LABRYNTH_SWITCH = 8;
 
 var RoundTimer = function(game, labrynthSwitchCallback, labrynthSwitchCallbackContext) {
   this.game = game;
