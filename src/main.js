@@ -67,10 +67,10 @@ Gameplay.prototype.create = function()
   this.kamis.addChild(kami1);
 
   this.map = this.game.add.tilemap();
-  this.map.addTilesetImage('tiles', undefined, TILE_SIZE, TILE_SIZE, 0, 8);
+  this.map.addTilesetImage('tiles', undefined, TILE_SIZE, TILE_SIZE);
 
   this.floorTiles = this.map.create('floors', MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, TILE_SIZE);
-  this.map.fill(1, 0, 0, MAP_WIDTH, MAP_HEIGHT, this.floorTiles);
+  this.map.fill(10, 0, 0, MAP_WIDTH, MAP_HEIGHT, this.floorTiles);
 
   this.wallTiles = this.map.create('walls', MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, TILE_SIZE);
   this.wallTiles.resizeWorld();
