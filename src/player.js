@@ -20,6 +20,13 @@ var Player = function(game, x, y, gamepad, index) {
 
   this.holdingFruit = false;
 
+  this.events.onKilled.add(function () {
+    if (this.holding !== undefined) {
+      this.holding.kill();
+      this.holding = null;
+    }
+  }, this);
+
   game.add.existing(this);
 };
 
