@@ -131,3 +131,7 @@ GraphModel.prototype.fillWalls = function() {
     }
   }
 };
+GraphModel.prototype.refreshMaze = function() {
+  this.randomizeEdges();
+  this.fillWalls();
+};

@@ -30,6 +30,11 @@ Gameplay.prototype.init = function()
   this.floorTiles = null;
 
   this.model = null;
+
+  this.timer = null;
+
+  // UI-related stuff
+  this.timeCountdown = null;
 };
 Gameplay.prototype.create = function()
 {
@@ -40,17 +45,17 @@ Gameplay.prototype.create = function()
   this.wallTiles.resizeWorld();
 
   this.model = new GraphModel(this.game, this.map, this.wallTiles);
-  this.model.randomizeEdges();
-  this.model.fillWalls();
+  this.model.refreshMaze();
 
-  this.game.input.onTap.add(function () {
-    this.model = new GraphModel(this.game, this.map, this.wallTiles);
-    this.model.randomizeEdges();
-    this.model.fillWalls();
-  }, this);
+  this.timer = new RoundTimer(this.game, function () { this.model.refreshMaze(); }, this);
+  this.timer.resetTimer();
+
+  // init UI
+  this.timeCountdown = this.game.add.text(32, 32, this.timer.timeLeft, {fill: 'white'});
 };
 Gameplay.prototype.update = function()
 {
+  this.timeCountdown.text = this.timer.timeLeft;
 };
 
 var main = function() {
