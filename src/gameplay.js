@@ -8,6 +8,9 @@ Gameplay.prototype.init = function(playerInputData)
   this.kamis = null;
   this.fruits = null;
 
+  this.labrynthEmitter = null;
+  this.gridCache = null;
+
   this.map = null;
   this.wallTiles = null
   this.floorTiles = null;
@@ -61,10 +64,23 @@ Gameplay.prototype.create = function()
 
   this.map.setCollisionBetween(0, 63);
 
+  this.gridCache = [];
+  for (var i = 0; i < MAP_WIDTH; i++) {
+    var row = [];
+    for (var j = 0; j < MAP_HEIGHT; j++) {
+      row.push(false);
+    }
+    this.gridCache.push(row);
+  }
+
   this.model = new GraphModel(this.game, this.map, this.wallTiles, this.players, this.fruits);
   this.model.refreshMaze();
+  this.updateMapCache(false);
 
-  this.timer = new RoundTimer(this.game, function () { this.model.refreshMaze(); }, this);
+  this.timer = new RoundTimer(this.game, function () {
+    this.model.refreshMaze();
+    this.updateMapCache(true);
+  }, this);
   this.timer.resetTimer();
   this.timer.pauseTimer();
 
@@ -79,10 +95,28 @@ Gameplay.prototype.create = function()
     this.playerScoresUI.addChild(text);
   }
 
+  this.labrynthEmitter = this.game.add.emitter(0, 0, 200);
+  this.labrynthEmitter.makeParticles('particles', [0, 1]);
+  this.labrynthEmitter.lifespan = 150;
+
   // Ordering hacks
   this.game.world.bringToTop(this.fruits);
   this.game.world.bringToTop(this.players);
   this.game.world.bringToTop(this.kamis);
+
+  this.game.time.events.loop(200, function () {
+    this.players.forEach(function (p) {
+      if (p.defeated === false && p.body.velocity.getMagnitude() > 0.001 && p.holding !== undefined)
+      {
+        var oldLifespan = this.labrynthEmitter.lifespan;
+        this.labrynthEmitter.lifespan = 100;
+        this.labrynthEmitter.setXSpeed(p.body.velocity.x * -0.75, p.body.velocity.x * -0.75);
+        this.labrynthEmitter.setYSpeed(p.body.velocity.y * -0.75, p.body.velocity.y * -0.75);
+        this.labrynthEmitter.emitParticle(p.x, p.y, 'particles', 3);
+        this.labrynthEmitter.lifespan = oldLifespan;
+      }
+    }, this);
+  }, this);
 
   this.players.forEach(function (p) { p.lockMovement = true; }, this);
   var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, 'READY?', {fill: 'white', font: '128px Arial'});
@@ -147,6 +181,33 @@ Gameplay.prototype.playerWins = function(index) {
   this.timer.pauseTimer();
   this.kamis.forEach(function (k) { k.lockMovement = true; }, this);
   this.players.forEach(function (p) { p.lockMovement = true; }, this);
+};
+
+// particle effects for map changes
+Gameplay.prototype.updateMapCache = function(spitParticles) {
+  for (var i = 0; i < MAP_WIDTH; i++)
+  {
+    for (var j = 0; j < MAP_HEIGHT; j++)
+    {
+      var t = this.map.getTile(i, j, this.wallTiles);
+      if (t !== null && this.gridCache[i][j] === false && spitParticles) {
+        this.labrynthEmitter.setXSpeed(300, 300);
+        this.labrynthEmitter.setYSpeed(300, 300);
+        this.labrynthEmitter.emitParticle(i * 32 + 16, j * 32 + 16, 'particles', 0);
+        this.labrynthEmitter.setXSpeed(-300, -300);
+        this.labrynthEmitter.setYSpeed(300, 300);
+        this.labrynthEmitter.emitParticle(i * 32 + 16, j * 32 + 16, 'particles', 0);
+        this.labrynthEmitter.setXSpeed(300, 300);
+        this.labrynthEmitter.setYSpeed(-300, -300);
+        this.labrynthEmitter.emitParticle(i * 32 + 16, j * 32 + 16, 'particles', 0);
+        this.labrynthEmitter.setXSpeed(-300, -300);
+        this.labrynthEmitter.setYSpeed(-300, -300);
+        this.labrynthEmitter.emitParticle(i * 32 + 16, j * 32 + 16, 'particles', 0);
+      }
+
+      this.gridCache[i][j] = (t !== null);
+    }
+  }
 };
 
 // Collision detection callbacks
