@@ -1,11 +1,13 @@
 var MATRIX_WIDTH = Math.ceil(MAP_WIDTH / ROOM_WIDTH);
 var MATRIX_HEIGHT = Math.ceil(MAP_HEIGHT / ROOM_HEIGHT);
 
-var GraphModel = function(game, map, wallLayer) {
+var GraphModel = function(game, map, wallLayer, playerGroup) {
   this.game = game;
 
   this.map = map;
   this.wallLayer = wallLayer;
+
+  this.playerGroup = playerGroup;
 
   this.adjacncyMatrix = [];
   for (var i = 0; i < MATRIX_WIDTH * MATRIX_HEIGHT; i++) {
@@ -103,6 +105,7 @@ GraphModel.prototype.fillWalls = function() {
     }
   }
 
+  // ensure there are no 1x1 rooms
   for (var i = 0; i < MAP_WIDTH; i++) {
     for (var j = 0; j < MAP_HEIGHT; j++) {
       var t = this.map.getTile(i, j, this.wallLayer);
@@ -130,6 +133,21 @@ GraphModel.prototype.fillWalls = function() {
       }
     }
   }
+
+  this.playerGroup.forEach(function (player) {
+    var spots = [
+      { x: player.body.x, y: player.body.y },
+      { x: player.body.x, y: player.body.bottom - 1 },
+      { x: player.body.right - 1, y: player.body.y },
+      { x: player.body.right - 1, y: player.body.bottom - 1 }];
+
+    spots.forEach(function (spot) {
+      var bodyCornerTile = this.map.getTile(~~(spot.x / TILE_SIZE), ~~(spot.y / TILE_SIZE), this.wallLayer);
+      if (bodyCornerTile !== null) {
+        this.map.removeTile(~~(spot.x / TILE_SIZE), ~~(spot.y / TILE_SIZE), this.wallLayer);
+      }
+    }, this);
+  }, this);
 };
 GraphModel.prototype.refreshMaze = function() {
   this.randomizeEdges();

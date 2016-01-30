@@ -42,7 +42,9 @@ Gameplay.prototype.init = function()
 };
 Gameplay.prototype.create = function()
 {
-  this.player = new Player(this.game, 100, 100, this.game.input.gamepad.pad1, 0);
+  this.players = this.game.add.group();
+  var player1 = new Player(this.game, 128 + 16, 128 + 48, this.game.input.gamepad.pad1, 0);
+  this.players.addChild(player1);
 
   this.map = this.game.add.tilemap();
   this.map.addTilesetImage('tiles');
@@ -52,7 +54,7 @@ Gameplay.prototype.create = function()
 
   this.map.setCollisionBetween(0, 63);
 
-  this.model = new GraphModel(this.game, this.map, this.wallTiles);
+  this.model = new GraphModel(this.game, this.map, this.wallTiles, this.players);
   this.model.refreshMaze();
 
   this.timer = new RoundTimer(this.game, function () { this.model.refreshMaze(); }, this);
@@ -62,13 +64,13 @@ Gameplay.prototype.create = function()
   this.timeCountdown = this.game.add.text(32, 32, this.timer.timeLeft, {fill: 'white'});
 
   // Ordering hacks
-  this.game.world.bringToTop(this.player);
+  this.game.world.bringToTop(this.players);
 };
 Gameplay.prototype.update = function()
 {
   this.timeCountdown.text = this.timer.timeLeft;
 
-  this.game.physics.arcade.collide(this.player, this.wallTiles);
+  this.game.physics.arcade.collide(this.players, this.wallTiles);
 };
 
 var main = function() {
