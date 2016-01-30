@@ -1,0 +1,7 @@
+var GAME_SCREEN_WIDTH = 960;
+var GAME_SCREEN_HEIGHT = 768;
+
+var MAP_WIDTH = 30;
+var MAP_HEIGHT = 34;
+
+var TILE_SIZE = 32;
