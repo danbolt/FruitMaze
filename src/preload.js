@@ -4,6 +4,7 @@ Preload.prototype.preload = function()
   this.game.load.image('tiles', 'asset/img/tiles.png');
 
   this.game.load.spritesheet('tiles_s', 'asset/img/tiles.png', 32, 32);
+  this.game.load.spritesheet('charsheet', 'asset/img/chara_anim_sheet.png', 70, 80);
 };
 Preload.prototype.create = function()
 {
@@ -22,5 +23,5 @@ Preload.prototype.create = function()
 
   this.game.input.gamepad.start();  
 
-  this.game.state.start('Gameplay', true, false, [this.game.input.gamepad.pad1, this.game.input.keyboard, this.game.input.gamepad.pad2]);
+  this.game.state.start('Gameplay', true, false, [this.game.input.gamepad.pad1, this.game.input.keyboard, this.game.input.gamepad.pad2, this.game.input.gamepad.pad2]);
 };

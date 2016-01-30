@@ -47,7 +47,6 @@ Gameplay.prototype.create = function()
     var player1 = new Player(this.game, 512 + 16 + (i * 64), 512 + 48 - 64, this.playerInputData[i], i, undefined);
     this.players.addChild(player1);
     this.players.addToHash(player1);
-    player1.tint = DEBUG_TINTS[i];
 
     var kami1 = new Kami(this.game, Math.random() * GAME_SCREEN_WIDTH * 0.5 + GAME_SCREEN_WIDTH * 0.25, Math.random() * GAME_SCREEN_HEIGHT * 0.5 + GAME_SCREEN_HEIGHT * 0.25, i);
     this.kamis.addChild(kami1);
@@ -168,6 +167,10 @@ Gameplay.prototype.pickUpFruit = function (player, fruit)
 };
 Gameplay.prototype.playerCollidesKami = function(player, kami)
 {
+  if (player.defeated === true) {
+    return;
+  }
+
   if (player.index === kami.index) {
     if (player.holdingFruit === true) {
       player.holdingFruit = false;
@@ -177,7 +180,7 @@ Gameplay.prototype.playerCollidesKami = function(player, kami)
       this.scores.playerEarnsScore(player.index);
     }
   } else {
-    player.kill();
+    player.defeat();
   }
 
   return false;
