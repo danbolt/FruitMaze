@@ -69,7 +69,7 @@ Gameplay.prototype.create = function()
 
   this.map.setCollisionBetween(0, 63);
 
-  this.model = new GraphModel(this.game, this.map, this.wallTiles, this.players);
+  this.model = new GraphModel(this.game, this.map, this.wallTiles, this.players, this.fruits);
   this.model.refreshMaze();
 
   this.timer = new RoundTimer(this.game, function () { this.model.refreshMaze(); }, this);
@@ -123,8 +123,8 @@ Gameplay.prototype.spawnFruit = function() {
   var newFruit = this.fruits.getFirstDead();
   if (newFruit !== null) {
     newFruit.revive();
-    newFruit.x = randX * 32;
-    newFruit.y = randY * 32;
+    newFruit.x = randX * 32 + 16;
+    newFruit.y = randY * 32 + 16;
   }
 };
 

@@ -1,13 +1,14 @@
 var MATRIX_WIDTH = Math.ceil(MAP_WIDTH / ROOM_WIDTH);
 var MATRIX_HEIGHT = Math.ceil(MAP_HEIGHT / ROOM_HEIGHT);
 
-var GraphModel = function(game, map, wallLayer, playerGroup) {
+var GraphModel = function(game, map, wallLayer, playerGroup, fruitGroup) {
   this.game = game;
 
   this.map = map;
   this.wallLayer = wallLayer;
 
   this.playerGroup = playerGroup;
+  this.fruitGroup = fruitGroup;
 
   this.adjacncyMatrix = [];
   for (var i = 0; i < MATRIX_WIDTH * MATRIX_HEIGHT; i++) {
@@ -147,6 +148,13 @@ GraphModel.prototype.fillWalls = function() {
         this.map.removeTile(~~(spot.x / TILE_SIZE), ~~(spot.y / TILE_SIZE), this.wallLayer);
       }
     }, this);
+  }, this);
+
+  this.fruitGroup.forEach(function (fruit) {
+    var bodyCornerTile = this.map.getTile(~~(fruit.x / TILE_SIZE), ~~(fruit.y / TILE_SIZE), this.wallLayer);
+    if (bodyCornerTile !== null) {
+      this.map.removeTile(~~(fruit.x / TILE_SIZE), ~~(fruit.y / TILE_SIZE), this.wallLayer);
+    }
   }, this);
 
   // make the borders all one colour
