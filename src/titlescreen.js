@@ -16,7 +16,17 @@ TitleScreen.prototype.create = function() {
     this.startWithInput(this.game.input.keyboard);
   }, this);
 
-  // start Gameplay state with something like[this.game.input.gamepad.pad1, this.game.input.keyboard, this.game.input.gamepad.pad2]
+  var fullScreenKey = this.game.input.keyboard.addKey(Phaser.KeyCode.F4);
+  fullScreenKey.onUp.add(function () {
+    if (this.game.scale.isFullScreen)
+    {
+        this.game.scale.stopFullScreen();
+    }
+    else
+    {
+        this.game.scale.startFullScreen(false);
+    }
+  }, this);
 };
 TitleScreen.prototype.update = function() {
   if (this.game.input.gamepad.pad1.justPressed(Phaser.Gamepad.XBOX360_A)) {

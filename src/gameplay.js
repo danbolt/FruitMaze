@@ -26,18 +26,6 @@ Gameplay.prototype.init = function(playerInputData)
 };
 Gameplay.prototype.create = function()
 {
-  var fullScreenKey = this.game.input.keyboard.addKey(Phaser.KeyCode.ESC);
-  fullScreenKey.onUp.add(function () {
-    if (this.game.scale.isFullScreen)
-    {
-        this.game.scale.stopFullScreen();
-    }
-    else
-    {
-        this.game.scale.startFullScreen(false);
-    }
-  }, this);
-
   this.currentState = this.states[0];
 
   this.players = this.game.add.group();

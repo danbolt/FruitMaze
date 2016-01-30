@@ -1,10 +1,10 @@
-var GAME_SCREEN_WIDTH = 960 + 32;
-var GAME_SCREEN_HEIGHT = 768 + 32;
+var GAME_SCREEN_WIDTH = 800 + 32;
+var GAME_SCREEN_HEIGHT = 640 + 32;
 
 var UI_BAR_HEIGHT = 96;
 
-var MAP_WIDTH = 30 + 1;
-var MAP_HEIGHT = 24 + 1;
+var MAP_WIDTH = 25 + 1;
+var MAP_HEIGHT = 20 + 1;
 
 var TILE_SIZE = 32;
 
