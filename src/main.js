@@ -30,6 +30,7 @@ Gameplay.prototype.init = function()
 {
   this.players = null;
   this.kamis = null;
+  this.fruits = null;
 
   this.map = null;
   this.wallTiles = null
@@ -58,7 +59,8 @@ Gameplay.prototype.create = function()
 
   this.players = this.game.add.group();
 
-  var player1 = new Player(this.game, 128 + 16, 128 + 48, this.game.input.gamepad.pad1, 0);
+  var player1 = new Player(this.game, 128 + 16, 128 + 48, this.game.input.gamepad.pad1, 0, undefined);
+  //var player1 = new Player(this.game, 128 + 16, 128 + 48, undefined, 0, this.game.input.keyboard);
   this.players.addChild(player1);
 
   this.kamis = this.game.add.group();
