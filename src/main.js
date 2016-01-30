@@ -68,6 +68,10 @@ Gameplay.prototype.create = function()
   var kami1 = new Kami(this.game, 256, 256, 0);
   this.kamis.addChild(kami1);
 
+  this.fruits = this.game.add.group();
+  var fruit1 = new Fruit(this.game, 512 + 32, 512 + 32);
+  this.fruits.addChild(fruit1);
+
   this.map = this.game.add.tilemap();
   this.map.addTilesetImage('tiles', undefined, TILE_SIZE, TILE_SIZE);
 
@@ -89,6 +93,7 @@ Gameplay.prototype.create = function()
   this.timeCountdown = this.game.add.text(32, GAME_SCREEN_HEIGHT + 32, this.timer.timeLeft, {fill: 'white'});
 
   // Ordering hacks
+  this.game.world.bringToTop(this.fruits);
   this.game.world.bringToTop(this.players);
   this.game.world.bringToTop(this.kamis);
 };
