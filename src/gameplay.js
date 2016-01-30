@@ -26,10 +26,18 @@ Gameplay.prototype.init = function(playerInputData)
 
   // UI-related stuff
   this.timeCountdown = null;
+
+  // Sound effect stuff
+  this.wallSoundEffects = [];
 };
 Gameplay.prototype.create = function()
 {
   this.currentState = this.states[0];
+
+  for (var i = 0; i < 3; i++) {
+    var wallSound = this.game.add.sound('wall' + i, 1.2);
+    this.wallSoundEffects.push(wallSound);
+  }
 
   this.players = this.game.add.group();
   this.kamis = this.game.add.group();
@@ -80,6 +88,8 @@ Gameplay.prototype.create = function()
   this.timer = new RoundTimer(this.game, function () {
     this.model.refreshMaze();
     this.updateMapCache(true);
+
+    this.wallSoundEffects[~~(Math.random() * this.wallSoundEffects.length)].play();
   }, this);
   this.timer.resetTimer();
   this.timer.pauseTimer();

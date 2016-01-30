@@ -1,6 +1,12 @@
 var Preload = function() {};
 Preload.prototype.preload = function()
 {
+  this.game.load.audio('main_theme', 'asset/bgm/main.ogg');
+
+  this.game.load.audio('wall0', 'asset/sfx/wall1.ogg');
+  this.game.load.audio('wall1', 'asset/sfx/wall2.ogg');
+  this.game.load.audio('wall2', 'asset/sfx/wall3.ogg');
+
   this.game.load.image('tiles', 'asset/img/tiles.png');
 
   this.game.load.spritesheet('tiles_s', 'asset/img/tiles.png', 32, 32);
@@ -26,4 +32,7 @@ Preload.prototype.create = function()
   this.game.input.gamepad.start();  
 
   this.game.state.start('TitleScreen', true, false);
+
+  var bgm = this.game.add.audio('main_theme', 0.25, true);
+  bgm.play()
 };
