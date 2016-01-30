@@ -11,12 +11,19 @@ var Kami = function (game, x, y, index) {
 
   this.index = index;
 
+  this.lockMovement = false;
+
   this.game.add.existing(this);
 };
 Kami.prototype = Object.create(Phaser.Sprite.prototype);
 Kami.prototype.constructor = Kami;
 
 Kami.prototype.update = function () {
+  if (this.lockMovement === true) {
+    this.body.velocity.set(0);
+    return;
+  }
+
   var deltaDirection = Phaser.Point.normalize(Phaser.Point.subtract(this.target, this.position));
   this.body.velocity.set(deltaDirection.x * KAMI_MOVE_SPEED, deltaDirection.y * KAMI_MOVE_SPEED);
 

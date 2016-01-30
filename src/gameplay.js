@@ -124,6 +124,13 @@ Gameplay.prototype.update = function()
   if (this.fruits.countLiving() < this.numberOfFruitToSpawn) {
     this.spawnFruit();
   }
+
+  // check if only one player is standing
+  var playersLeftStanding = [];
+  this.players.forEach(function (p) { if (p.defeated === false) { playersLeftStanding.push(p); } });
+  if (playersLeftStanding.length == 1) {
+    this.playerWins(playersLeftStanding[0].index);
+  }
 };
 
 // game logic helpers
@@ -150,6 +157,7 @@ Gameplay.prototype.playerWins = function(index) {
   startText.anchor.x = 0.5;
 
   this.timer.pauseTimer();
+  this.kamis.forEach(function (k) { k.lockMovement = true; }, this);
   this.players.forEach(function (p) { p.lockMovement = true; }, this);
 };
 
