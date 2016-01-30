@@ -29,10 +29,15 @@ Preload.prototype.create = function()
 
   PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST; //for WebGL
 
-  this.game.input.gamepad.start();  
+  this.game.input.gamepad.start();
+};
+Preload.prototype.update = function ()
+{
+  if (this.game.cache.isSoundDecoded('main_theme'))
+  {
+    this.game.state.start('TitleScreen', true, false);
 
-  this.game.state.start('TitleScreen', true, false);
-
-  var bgm = this.game.add.audio('main_theme', 0.25, true);
-  bgm.play()
+    var bgm = this.game.add.audio('main_theme', 0.25, true);
+    bgm.play();
+  }
 };
