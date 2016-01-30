@@ -68,7 +68,7 @@ TitleScreen.prototype.pushInput = function(input) {
   this.enteredPlayers.push(input);
 
   this.debugSlotsText.text = '';
-  this.enteredPlayers.forEach(function (player) { this.debugSlotsText.text += player + '\n'; }, this);
+  this.enteredPlayers.forEach(function (player) { this.debugSlotsText.text += (player instanceof Phaser.Keyboard ? 'Ⓚ' : ['①', '②', '③', '④'][player.index]) + '\n'; }, this);
 };
 TitleScreen.prototype.removeInput = function(input) {
   if (this.enteredPlayers.indexOf(input) === -1)
@@ -85,7 +85,7 @@ TitleScreen.prototype.removeInput = function(input) {
   else
   {
     this.debugSlotsText.text = '';
-    this.enteredPlayers.forEach(function (player) { this.debugSlotsText.text += player + '\n'; }, this);
+    this.enteredPlayers.forEach(function (player) { this.debugSlotsText.text += (player instanceof Phaser.Keyboard ? 'Ⓚ' : ['①', '②', '③', '④'][player.index]) + '\n'; }, this);
   }
 };
 TitleScreen.prototype.startWithInput = function(input) {
