@@ -61,7 +61,7 @@ Gameplay.prototype.create = function()
   this.timer.resetTimer();
 
   // init UI
-  this.timeCountdown = this.game.add.text(32, 32, this.timer.timeLeft, {fill: 'white'});
+  this.timeCountdown = this.game.add.text(32, GAME_SCREEN_HEIGHT + 32, this.timer.timeLeft, {fill: 'white'});
 
   // Ordering hacks
   this.game.world.bringToTop(this.players);
@@ -74,7 +74,7 @@ Gameplay.prototype.update = function()
 };
 
 var main = function() {
-  var game = new Phaser.Game(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
+  var game = new Phaser.Game(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT + UI_BAR_HEIGHT);
 
   game.state.add('Preload', Preload, false);
   game.state.add('Gameplay', Gameplay, false);
