@@ -4,7 +4,7 @@ var Fruit = function(game, x, y) {
   this.game.physics.arcade.enable(this);
   this.body.setSize(32, 32);
 
-  this.tint = 0x0000FF;
+  this.tint = 0xDD22DD;
 
   this.game.add.existing(this);
 };

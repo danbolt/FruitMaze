@@ -16,6 +16,8 @@ Gameplay.prototype.init = function(playerInputData)
 
   this.playerInputData = playerInputData;
 
+  this.numberOfFruitToSpawn = (playerInputData.length > 2 ? 2 : 1);
+
   // UI-related stuff
   this.timeCountdown = null;
 };
@@ -73,7 +75,7 @@ Gameplay.prototype.create = function()
   this.timer = new RoundTimer(this.game, function () { this.model.refreshMaze(); }, this);
   this.timer.resetTimer();
 
-  this.scores = new GameScores(this.game, 1, function(index) { console.log('player ' + (index + 1) + ' wins!'); }, this);
+  this.scores = new GameScores(this.game, this.playerInputData.length, function(index) { console.log('player ' + (index + 1) + ' wins!'); }, this);
 
   // init UI
   this.timeCountdown = this.game.add.text(32, GAME_SCREEN_HEIGHT + 32, this.timer.timeLeft, {fill: 'white'});
@@ -88,8 +90,6 @@ Gameplay.prototype.create = function()
   this.game.world.bringToTop(this.fruits);
   this.game.world.bringToTop(this.players);
   this.game.world.bringToTop(this.kamis);
-
-  this.spawnFruit(17, 8);
 };
 Gameplay.prototype.update = function()
 {
@@ -103,15 +103,28 @@ Gameplay.prototype.update = function()
   this.game.physics.arcade.collide(this.players, this.wallTiles);
   this.game.physics.arcade.overlap(this.players, this.fruits, this.pickUpFruit, this.checkPickUpFruit, this);
   this.game.physics.arcade.overlap(this.players, this.kamis, null, this.playerCollidesKami, this);
+
+  if (this.fruits.countLiving() < this.numberOfFruitToSpawn) {
+    this.spawnFruit();
+  }
 };
 
 // game logic helpers
-Gameplay.prototype.spawnFruit = function(x, y) {
+Gameplay.prototype.spawnFruit = function() {
+  var randX = ~~(Math.random() * MAP_WIDTH * 0.7 + MAP_WIDTH * 0.15);
+  var randY = ~~(Math.random() * MAP_HEIGHT * 0.7 + MAP_HEIGHT * 0.15);
+  var randTile = this.map.getTile(randX, randY, this.wallTiles);
+  while (randTile !== null) {
+    randX = ~~(Math.random() * MAP_WIDTH * 0.7 + MAP_WIDTH * 0.15);
+    randY = ~~(Math.random() * MAP_HEIGHT * 0.7 + MAP_HEIGHT * 0.15);
+    randTile = this.map.getTile(randX, randY, this.wallTiles);
+  }
+
   var newFruit = this.fruits.getFirstDead();
   if (newFruit !== null) {
     newFruit.revive();
-    newFruit.x = x * 32;
-    newFruit.y = y * 32;
+    newFruit.x = randX * 32;
+    newFruit.y = randY * 32;
   }
 };
 
@@ -122,7 +135,9 @@ Gameplay.prototype.checkPickUpFruit = function(player)
 };
 Gameplay.prototype.pickUpFruit = function (player, fruit)
 {
-  fruit.kill();
+  if (fruit.visible === false) { return; }
+  fruit.visible = false;
+  player.holding = fruit;
   player.holdFruit();
 };
 Gameplay.prototype.playerCollidesKami = function(player, kami)
@@ -131,6 +146,8 @@ Gameplay.prototype.playerCollidesKami = function(player, kami)
     if (player.holdingFruit === true) {
       player.holdingFruit = false;
 
+      player.holding.kill();
+      player.holding = undefined;
       this.scores.playerEarnsScore(player.index);
     }
   } else {
