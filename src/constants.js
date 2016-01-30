@@ -1,12 +1,12 @@
-var GAME_SCREEN_WIDTH = 800 + 32;
-var GAME_SCREEN_HEIGHT = 640 + 32;
-
-var UI_BAR_HEIGHT = 96;
-
-var MAP_WIDTH = 25 + 1;
-var MAP_HEIGHT = 20 + 1;
+var MAP_WIDTH = 23 + 1;
+var MAP_HEIGHT = 18 + 1;
 
 var TILE_SIZE = 32;
+
+var GAME_SCREEN_WIDTH = (MAP_WIDTH - 1) * TILE_SIZE + 32;
+var GAME_SCREEN_HEIGHT = (MAP_HEIGHT - 1) * TILE_SIZE + 32;
+
+var UI_BAR_HEIGHT = 96;
 
 var ROOM_WIDTH = 2; // in tiles
 var ROOM_HEIGHT = 2;
