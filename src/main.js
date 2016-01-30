@@ -87,8 +87,8 @@ Gameplay.prototype.create = function()
   this.timeCountdown = this.game.add.text(32, GAME_SCREEN_HEIGHT + 32, this.timer.timeLeft, {fill: 'white'});
 
   // Ordering hacks
-  this.game.world.bringToTop(this.kamis);
   this.game.world.bringToTop(this.players);
+  this.game.world.bringToTop(this.kamis);
 };
 Gameplay.prototype.update = function()
 {

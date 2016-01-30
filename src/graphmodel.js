@@ -71,18 +71,18 @@ GraphModel.prototype.fillWalls = function() {
   {
     for (var j = 0; j < MATRIX_HEIGHT; j++)
     {
-      this.map.putTile(~~(Math.random() * 5), i * ROOM_WIDTH, j * ROOM_HEIGHT, this.wallLayer);
+      this.map.putTile(0, i * ROOM_WIDTH, j * ROOM_HEIGHT, this.wallLayer);
 
       // place horizontal gaps
       if (this.checkEdge(i, j, i + 1, j) === false) {
-        this.map.putTile(~~(Math.random() * 5), i * ROOM_WIDTH + 1, j * ROOM_HEIGHT, this.wallLayer);
+        this.map.putTile(1 + ~~(Math.random() * 4), i * ROOM_WIDTH + 1, j * ROOM_HEIGHT, this.wallLayer);
       }
       else {
         this.map.removeTile(i * ROOM_WIDTH + 1, j * ROOM_HEIGHT, this.wallLayer);
       }
 
       if (this.checkEdge(i, j, i - 1, j) === false) {
-        this.map.putTile(~~(Math.random() * 5), i * ROOM_WIDTH - 1, j * ROOM_HEIGHT, this.wallLayer);
+        this.map.putTile(1 + ~~(Math.random() * 4), i * ROOM_WIDTH - 1, j * ROOM_HEIGHT, this.wallLayer);
       }
       else {
         this.map.removeTile(i * ROOM_WIDTH - 1, j * ROOM_HEIGHT, this.wallLayer);
@@ -90,14 +90,14 @@ GraphModel.prototype.fillWalls = function() {
 
       // place vertical gaps
       if (this.checkEdge(i, j, i, j + 1) === false) {
-        this.map.putTile(~~(Math.random() * 5), i * ROOM_WIDTH, j * ROOM_HEIGHT + 1, this.wallLayer);
+        this.map.putTile(1 + ~~(Math.random() * 4), i * ROOM_WIDTH, j * ROOM_HEIGHT + 1, this.wallLayer);
       }
       else {
         this.map.removeTile(i * ROOM_WIDTH, j * ROOM_HEIGHT + 1, this.wallLayer);
       }
 
       if (this.checkEdge(i, j, i, j - 1) === false) {
-        this.map.putTile(~~(Math.random() * 5), i * ROOM_WIDTH, j * ROOM_HEIGHT - 1, this.wallLayer);
+        this.map.putTile(1 + ~~(Math.random() * 4), i * ROOM_WIDTH, j * ROOM_HEIGHT - 1, this.wallLayer);
       }
       else {
         this.map.removeTile(i * ROOM_WIDTH, j * ROOM_HEIGHT - 1, this.wallLayer);
@@ -148,6 +148,17 @@ GraphModel.prototype.fillWalls = function() {
       }
     }, this);
   }, this);
+
+  // make the borders all one colour
+  for (var i = 0; i < MAP_WIDTH; i++) {
+    this.map.putTile(0, i, 0, this.wallLayer);
+    this.map.putTile(0, i, MAP_HEIGHT - 1, this.wallLayer);
+
+    if (i < MAP_HEIGHT) {
+      this.map.putTile(0, 0, i, this.wallLayer);
+      this.map.putTile(0, MAP_WIDTH - 1, i, this.wallLayer);
+    }
+  }
 };
 GraphModel.prototype.refreshMaze = function() {
   this.randomizeEdges();
