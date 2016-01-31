@@ -6,6 +6,8 @@ TitleScreen.prototype.init = function() {
 };
 TitleScreen.prototype.create = function() {
 
+  var explanations = this.game.add.sprite(0, 0, 'explanations');
+
   this.slots = this.game.add.group();
   this.slots.x = GAME_SCREEN_WIDTH * 0.15;
   this.slots.y = (GAME_SCREEN_HEIGHT + UI_BAR_HEIGHT) * 0.75;
@@ -22,6 +24,7 @@ TitleScreen.prototype.create = function() {
   }
 
   this.game.world.sendToBack(this.emtpySlots);
+  this.game.world.sendToBack(explanations);
 
   var spaceKey = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
   spaceKey.onUp.add(function () { this.pushInput(this.game.input.keyboard); }, this);
@@ -49,18 +52,6 @@ TitleScreen.prototype.create = function() {
   var instructions = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT * 0.6, 'Press Ⓐ to enter\nPress Ⓑ to exit\nPress START when everyone has joined', {fill: 'white', font: '24px Georgia, sans-serif'});
   instructions.anchor.x = 0.5;
   instructions.align = 'center';
-
-  var comicText1 = this.game.add.text(GAME_SCREEN_WIDTH / 6, GAME_SCREEN_HEIGHT * 0.5, 'Bring fruit baskets\nto your god!', {fill: 'white', font: '16px Georgia, sans-serif'})
-  comicText1.align = 'center';
-  comicText1.anchor.x = 0.5;
-
-  var comicText1 = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT * 0.5, 'Avoid the other Gods\nplus the flames!', {fill: 'white', font: '16px Georgia, sans-serif'})
-  comicText1.align = 'center';
-  comicText1.anchor.x = 0.5;
-
-  var comicText1 = this.game.add.text(GAME_SCREEN_WIDTH /6 * 5, GAME_SCREEN_HEIGHT * 0.5, 'Deliver three fruit\nbaskets and you win!', {fill: 'white', font: '16px Georgia, sans-serif'})
-  comicText1.align = 'center';
-  comicText1.anchor.x = 0.5;
 
   this.game.bgm.volume = 0.25;
 };
@@ -123,7 +114,7 @@ TitleScreen.prototype.pushInput = function(input) {
   slotData.animations.play(ind.toString());
   slotData.anchor.x = 0.5;
   this.slots.addChild(slotData);
-  var slotSymbol = this.game.add.text(0, 180, (input instanceof Phaser.Keyboard ? '⌨' : ['①', '②', '③', '④'][input.index]), {fill: 'white', font: '48px Georgia, sans-serif'});
+  var slotSymbol = this.game.add.text(0, 180, (input instanceof Phaser.Keyboard ? '⌨' : ['🎮', '🎮', '🎮', '🎮'][input.index]), {fill: 'white', font: '48px Georgia, sans-serif'});
   slotSymbol.align = 'center';
   slotSymbol.anchor.set(0.5);
   slotSymbol.cacheAsBitmap = true;

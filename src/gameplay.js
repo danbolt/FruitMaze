@@ -31,6 +31,8 @@ Gameplay.prototype.init = function(playerInputData)
 };
 Gameplay.prototype.create = function()
 {
+  var explanations = this.game.add.sprite(0, 0, 'explanations');
+  
   this.currentState = this.states[0];
 
   this.players = this.game.add.group();
