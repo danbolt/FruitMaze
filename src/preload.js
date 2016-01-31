@@ -16,6 +16,7 @@ Preload.prototype.preload = function()
 
   this.game.load.spritesheet('tiles_s', 'asset/img/tiles.png', 32, 32);
   this.game.load.spritesheet('charsheet', 'asset/img/chara_anim_sheet.png', 70, 80);
+  this.game.load.spritesheet('flame', 'asset/img/flame.png', 32, 64);
 
   this.game.load.spritesheet('particles', 'asset/img/particles.png', 16, 16);
 };

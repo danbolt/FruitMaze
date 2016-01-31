@@ -38,7 +38,7 @@ TitleScreen.prototype.update = function() {
     this.pushInput(this.game.input.gamepad.pad2);
   }
   if (this.game.input.gamepad.pad3.justPressed(Phaser.Gamepad.XBOX360_A)) {
-    this.pushInput(pthis.game.input.gamepad.pad3);
+    this.pushInput(this.game.input.gamepad.pad3);
   }
   if (this.game.input.gamepad.pad4.justPressed(Phaser.Gamepad.XBOX360_A)) {
     this.pushInput(this.game.input.gamepad.pad4);

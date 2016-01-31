@@ -7,6 +7,7 @@ Gameplay.prototype.init = function(playerInputData)
   this.players = null;
   this.kamis = null;
   this.fruits = null;
+  this.flames = null;
 
   this.labrynthEmitter = null;
   this.gridCache = null;
@@ -34,6 +35,7 @@ Gameplay.prototype.create = function()
 
   this.players = this.game.add.group();
   this.kamis = this.game.add.group();
+  this.flames = this.game.add.group();
 
   for (var i = 0; i < this.playerInputData.length; i++) {
     var player1 = new Player(this.game, (i === 0 || i === 3) ? GAME_SCREEN_WIDTH - 128 : 128, (i === 0 || i === 2) ? 128 : GAME_SCREEN_HEIGHT - 128, this.playerInputData[i], i, undefined);
@@ -52,6 +54,14 @@ Gameplay.prototype.create = function()
     this.fruits.addChild(fruit1);
     this.fruits.addToHash(fruit1);
     fruit1.kill();
+  }
+
+  this.flames = this.game.add.group();
+  for (var i = 0; i < 5; i++) {
+    var flame = new Flame(this.game, 512 + 32, 512 + 32);
+    this.flames.addChild(flame);
+    this.flames.addToHash(flame);
+    flame.kill();
   }
 
   this.map = this.game.add.tilemap();
@@ -106,6 +116,7 @@ Gameplay.prototype.create = function()
   // Ordering hacks
   this.game.world.bringToTop(this.fruits);
   this.game.world.bringToTop(this.players);
+  this.game.world.bringToTop(this.flames);
   this.game.world.bringToTop(this.kamis);
 
   this.game.time.events.loop(200, function () {
@@ -206,6 +217,7 @@ Gameplay.prototype.update = function()
   }, function (pA, pB) { return !(pA.defeated) && !(pB.defeated) && (pA.knockbackDirection.getMagnitude() < 0.01) && (pB.knockbackDirection.getMagnitude() < 0.01); }, this);
 
   this.game.physics.arcade.collide(this.players, this.wallTiles);
+  this.game.physics.arcade.overlap(this.players, this.flames, undefined, function (player, flame) { this.playerCollidesFlame(player, flame); return false; }, this);
   this.game.physics.arcade.overlap(this.players, this.fruits, this.pickUpFruit, this.checkPickUpFruit, this);
   this.game.physics.arcade.overlap(this.players, this.kamis, null, this.playerCollidesKami, this);
 
@@ -315,6 +327,14 @@ Gameplay.prototype.pickUpFruit = function (player, fruit)
   player.holdFruit();
   this.game.sound.play('pick_fruit', 1.2);
 };
+Gameplay.prototype.playerCollidesFlame = function(player, flame) {
+  if (player.defeated || this.currentState !== this.states[1]) {
+    return;
+  }
+
+  player.defeat();
+  this.game.sound.play('death');
+}
 Gameplay.prototype.playerCollidesKami = function(player, kami)
 {
   if (player.defeated === true) {
