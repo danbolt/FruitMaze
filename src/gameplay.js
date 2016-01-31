@@ -93,13 +93,13 @@ Gameplay.prototype.create = function()
     this.updateMapCache(true);
 
     this.flames.forEach(function (f) { f.kill(); }, this);
-    var roll = ~~(Math.random() * 5);
+    var roll = ~~(Math.random() * 3);
     for (var i = 0; i < roll; i++) {
       this.spawnFlame();
     }
 
     this.game.sound.play('wall' + ~~(Math.random() * 3), 1.2);
-  }, this);
+  }, this, this.playerWins, this);
   this.timer.resetTimer();
   this.timer.pauseTimer();
 
@@ -293,8 +293,33 @@ Gameplay.prototype.playerWins = function(index) {
 
   this.currentState = this.states[2];
 
+  if (index === -1) {
+    var highestScore = 0;
+    for (var i = 0; i < this.scores.scores.length; i++) {
+      highestScore = Math.max(this.scores.scores[i]);
+    }
+
+    var numberOfPlayersWithHighestScore = 0;
+    for (var i = 0; i < this.scores.scores.length; i++) {
+      numberOfPlayersWithHighestScore += (this.scores.scores[i] === highestScore ? 1 : 0);
+    }
+
+    if (numberOfPlayersWithHighestScore <= 1)
+    {
+      var winnerIndex = -1;
+      var winnerPoints = 0;
+      for (var i = 0; i < this.scores.scores.length; i++) {
+        if (this.scores.scores[i] > winnerPoints) {
+          winnerPoints = this.scores.scores[i];
+          winnerIndex = i;
+        }
+      }
+      index = winnerIndex;
+    }
+  }
+
   this.game.time.events.add(3500, function () {
-    var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, 'PLAYER ' + (index + 1) + ' WINS!', {fill: 'white', font: '96px Arial'});
+    var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, (index === -1 ) ? 'DRAW!' : 'PLAYER ' + (index + 1) + ' WINS!', {fill: 'white', font: '96px Arial'});
     startText.align = 'center';
     startText.anchor.x = 0.5;
 

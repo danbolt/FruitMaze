@@ -1,7 +1,7 @@
-var ROUND_TIME = 60; //seconds
+var ROUND_TIME = 40; //seconds
 var TIME_PER_LABRYNTH_SWITCH = 4;
 
-var RoundTimer = function(game, labrynthSwitchCallback, labrynthSwitchCallbackContext) {
+var RoundTimer = function(game, labrynthSwitchCallback, labrynthSwitchCallbackContext, roundUpCallback, roundUpCallbackContext) {
   this.game = game;
 
   this.timeLeft = ROUND_TIME;
@@ -10,8 +10,13 @@ var RoundTimer = function(game, labrynthSwitchCallback, labrynthSwitchCallbackCo
   this.timer = game.time.create(false);
   this.timer.start();
 
+  this.timerEvent = null;
+
   this.labrynthSwitchCallback = labrynthSwitchCallback;
   this.labrynthSwitchCallbackContext = labrynthSwitchCallbackContext;
+
+  this.roundUpCallback = roundUpCallback;
+  this.roundUpCallbackContext = roundUpCallbackContext;
 };
 RoundTimer.prototype.resetTimer = function () {
   this.timeLeft = ROUND_TIME;
@@ -37,6 +42,8 @@ RoundTimer.prototype.stopTimer = function () {
     this.timer.remove(this.timerEvent);
     this.timerEvent = null;
   }
+
+  this.roundUpCallback.call(this.roundUpCallbackContext, -1);
 }
 RoundTimer.prototype.tick = function () {
   this.timeLeft = Math.max(this.timeLeft - 1, 0);
