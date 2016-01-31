@@ -145,14 +145,62 @@ Gameplay.prototype.update = function()
 
   // collision detection
   this.game.physics.arcade.collide(this.players, this.players, function (pA, pB) {
-    if (pB.holdingFruit === false)
-    {
-      pA.knockbackDirection = Phaser.Point.subtract(pA.position, pB.position);
-    }
     
-    if (pA.holdingFruit === false)
+    if (pA.holdingFruit === true)
+    {
+      var fallFruit = pA.holding;
+      fallFruit.visible = true;
+      pA.holdingFruit = false;
+      pA.holding = undefined;
+      
+      fallFruit.body.moves = false;
+      fallFruit.x = pA.x;
+      fallFruit.y = pA.y;
+      var fruitMoveTween = this.game.add.tween(fallFruit);
+      var target = {x: 2, y: 2};
+      this.setCleanDestination(target);
+      var tx = target.x;
+      var ty = target.y;
+      target.x = [(tx + fallFruit.x) / 2, tx];
+      target.y = [Math.min(ty, fallFruit.y) - 200, ty];
+      fruitMoveTween.to(target, 500);
+      fruitMoveTween.interpolation(Phaser.Math.bezierInterpolation);
+      fruitMoveTween.onComplete.add(function () {
+        fallFruit.body.moves = true;
+      }, this);
+      fruitMoveTween.start();
+    }
+    else
     {
       pB.knockbackDirection = Phaser.Point.subtract(pB.position, pA.position);
+    }
+    if (pB.holdingFruit === true)
+    {
+      var fallFruit = pB.holding;
+      fallFruit.visible = true;
+      pB.holdingFruit = false;
+      pB.holding = undefined;
+      
+      fallFruit.body.moves = false;
+      fallFruit.x = pB.x;
+      fallFruit.y = pB.y;
+      var fruitMoveTween = this.game.add.tween(fallFruit);
+      var target = {x: 2, y: 2};
+      this.setCleanDestination(target);
+      var tx = target.x;
+      var ty = target.y;
+      target.x = [(tx + fallFruit.x) / 2, tx];
+      target.y = [Math.min(ty, fallFruit.y) - 200, ty];
+      fruitMoveTween.to(target, 500);
+      fruitMoveTween.interpolation(Phaser.Math.bezierInterpolation);
+      fruitMoveTween.onComplete.add(function () {
+        fallFruit.body.moves = true;
+      }, this);
+      fruitMoveTween.start();
+    }
+    else
+    {
+      pA.knockbackDirection = Phaser.Point.subtract(pA.position, pB.position);
     }
     this.game.time.events.add(200, function () { pA.knockbackDirection.set(0); pB.knockbackDirection.set(0); });
   }, function (pA, pB) { return !(pA.defeated) && !(pB.defeated) && (pA.knockbackDirection.getMagnitude() < 0.01) && (pB.knockbackDirection.getMagnitude() < 0.01); }, this);
@@ -190,6 +238,19 @@ Gameplay.prototype.spawnFruit = function() {
     newFruit.x = randX * 32 + 16;
     newFruit.y = randY * 32 + 16;
   }
+};
+Gameplay.prototype.setCleanDestination = function (target) {
+  var randX = ~~(Math.random() * MAP_WIDTH * 0.8 + MAP_WIDTH * 0.1);
+  var randY = ~~(Math.random() * MAP_HEIGHT * 0.8 + MAP_HEIGHT * 0.1);
+  var randTile = this.map.getTile(randX, randY, this.wallTiles);
+  while (randTile !== null) {
+    randX = ~~(Math.random() * MAP_WIDTH * 0.8 + MAP_WIDTH * 0.1);
+    randY = ~~(Math.random() * MAP_HEIGHT * 0.8 + MAP_HEIGHT * 0.1);
+    randTile = this.map.getTile(randX, randY, this.wallTiles);
+  }
+
+  target.x = randX * 32 + 16;
+  target.y = randY * 32 + 16;
 };
 Gameplay.prototype.playerWins = function(index) {
   if (this.currentState !== this.states[1]) {
@@ -242,9 +303,9 @@ Gameplay.prototype.updateMapCache = function(spitParticles) {
 };
 
 // Collision detection callbacks
-Gameplay.prototype.checkPickUpFruit = function(player)
+Gameplay.prototype.checkPickUpFruit = function(player, fruit)
 {
-  return player.holdingFruit === false;
+  return (player.holdingFruit === false && fruit.body.moves === true);
 };
 Gameplay.prototype.pickUpFruit = function (player, fruit)
 {

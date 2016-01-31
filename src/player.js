@@ -135,6 +135,6 @@ Player.prototype.defeat = function() {
 
   if (this.holding !== undefined) {
     this.holding.kill();
-    this.holding = null;
+    this.holding = undefined;
   }
 };
