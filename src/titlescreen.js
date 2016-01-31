@@ -97,7 +97,7 @@ TitleScreen.prototype.pushInput = function(input) {
   }
   slotData.animations.play(ind.toString());
   this.slots.addChild(slotData);
-  var slotSymbol = this.game.add.text(32, 128, (input instanceof Phaser.Keyboard ? '⌨' : ['①', '②', '③', '④'][input.index]), {fill: 'white', font: '64px Georgia, sans-serif'});
+  var slotSymbol = this.game.add.text(32, 148, (input instanceof Phaser.Keyboard ? '⌨' : ['①', '②', '③', '④'][input.index]), {fill: 'white', font: '48px Georgia, sans-serif'});
   slotSymbol.align = 'center';
   slotSymbol.anchor.set(0.5);
   slotSymbol.cacheAsBitmap = true;
