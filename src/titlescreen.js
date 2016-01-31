@@ -10,11 +10,18 @@ TitleScreen.prototype.create = function() {
   this.slots.x = GAME_SCREEN_WIDTH * 0.15;
   this.slots.y = (GAME_SCREEN_HEIGHT + UI_BAR_HEIGHT) * 0.75;
 
-  /*
+  this.emtpySlots = this.game.add.group();
+  this.emtpySlots.x = this.slots.x;
+  this.emtpySlots.y = this.slots.y;
+
   for (var i = 0; i < 4; i++) {
-    var emptySlot = this.game.add.sprite(i * 180, -48, 'grey_icon', 4 * i);
-    emptySlot.alpha = 0.5;
-  }*/
+    var empty = this.game.add.sprite(i * 180, -48, 'grey_icon');
+    empty.anchor.x = 0.5;
+    empty.alpha = 0.5;
+    this.emtpySlots.addChild(empty);
+  }
+
+  this.game.world.sendToBack(this.emtpySlots);
 
   var spaceKey = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
   spaceKey.onUp.add(function () { this.pushInput(this.game.input.keyboard); }, this);
@@ -121,6 +128,10 @@ TitleScreen.prototype.pushInput = function(input) {
   slotSymbol.anchor.set(0.5);
   slotSymbol.cacheAsBitmap = true;
   slotData.addChild(slotSymbol);
+
+  for (var i = 0; i < 4; i++) {
+    this.emtpySlots.children[i].visible = (i >= this.enteredPlayers.length);
+  }
 };
 TitleScreen.prototype.removeInput = function(input) {
   if (this.enteredPlayers.indexOf(input) === -1)
@@ -137,8 +148,12 @@ TitleScreen.prototype.removeInput = function(input) {
   this.slots.forEach(function (slot) {
     slot.frame = (this.slots.children.indexOf(slot) * 51);
     slot.animations.play((this.slots.children.indexOf(slot)).toString());
-    slot.x = (this.slots.children.indexOf(slot) / 4) * (GAME_SCREEN_WIDTH * 0.8);
+    slot.x = (this.slots.children.indexOf(slot)) * 180;
   }, this);
+
+  for (var i = 0; i < 4; i++) {
+    this.emtpySlots.children[i].visible = (i >= this.enteredPlayers.length);
+  }
 };
 TitleScreen.prototype.startWithInput = function(input) {
   if (this.enteredPlayers.length < 2 || this.enteredPlayers.indexOf(input) === -1)
