@@ -32,7 +32,7 @@ Gameplay.prototype.init = function(playerInputData)
 Gameplay.prototype.create = function()
 {
   var explanations = this.game.add.sprite(0, 0, 'explanations');
-  
+
   this.currentState = this.states[0];
 
   this.players = this.game.add.group();
@@ -112,15 +112,22 @@ Gameplay.prototype.create = function()
 
   this.playerScoresUI = this.game.add.group();
   for (var i = 0; i < this.scores.playerCount; i++) {
-    var text = this.game.add.text(256 + i * 130, GAME_SCREEN_HEIGHT + 48, 'SCORE', {fill: 'white', font: '48px Georgia, Serif'});
+    var text = this.game.add.text(220 + i * 150, GAME_SCREEN_HEIGHT + 48, 'SCORE', {fill: 'white', font: '48px Georgia, Serif'});
     text.anchor.y = 0.5;
     this.playerScoresUI.addChild(text);
 
-    var icon = this.game.add.sprite(-32, 0, 'charsheet', i * 51);
-    icon.animations.add('jiggle', [3, 4, 5, 6, 5, 4].map(function (a) { return a + i * 51; }), 12, true);
+    var icon = this.game.add.sprite(-32, 8, 'icon', i * 4);
+    icon.animations.add('jiggle', [0, 1, 2, 3, 2, 1].map(function (a) { return a + i * 4; }), 12, true);
     icon.animations.play('jiggle');
     icon.anchor.set(0.5, 0.5);
+    icon.scale.set(0.55);
     text.addChild(icon);
+
+    var bowl = this.game.add.sprite(52, 0, 'fruit', 1);
+    bowl.anchor.set(0.5);
+    text.addChild(bowl);
+
+    text.scale.set(0.9);
   }
   this.labrynthEmitter = this.game.add.emitter(0, 0, 200);
   this.labrynthEmitter.makeParticles('particles', [0, 1]);
