@@ -340,9 +340,14 @@ Gameplay.prototype.playerWins = function(index) {
   }
 
   this.game.time.events.add(2500, function () {
-    var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, (index === -1 ) ? 'DRAW!' : 'PLAYER ' + (index + 1) + ' WINS!', {fill: 'white', font: '96px Georgia, Serif'});
+    var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT * 0.4, (index === -1 ) ? 'DRAW!' : 'PLAYER ' + (index + 1) + ' WINS!', {fill: 'white', font: '86px Georgia, Serif'});
     startText.align = 'center';
     startText.anchor.set(0.5);
+
+    var winGraphic = this.game.add.sprite(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT * 0.6, 'icon', index * 4);
+    winGraphic.animations.add('run', [0, 1, 2, 3, 2, 1].map(function (a) { return a + index * 4; }), 12, true);
+    winGraphic.anchor.set(0.5);
+    winGraphic.animations.play('run');
 
     this.timer.pauseTimer();
     this.kamis.forEach(function (k) { k.lockMovement = true; }, this);
