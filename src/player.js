@@ -40,6 +40,8 @@ var Player = function(game, x, y, gamepad, index) {
 
   this.lockMovement = false;
 
+  this.knockbackDirection = new Phaser.Point(0, 0);
+
   game.add.existing(this);
 };
 
@@ -47,7 +49,14 @@ Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
-  this.directionalMove();
+  if (this.knockbackDirection.getMagnitude() < 0.01)
+  {
+    this.directionalMove();
+  }
+  else
+  {
+    this.body.velocity.set(Phaser.Point.normalize(this.knockbackDirection).x * PLAYER_MOVE_SPEED, Phaser.Point.normalize(this.knockbackDirection).y * PLAYER_MOVE_SPEED);
+  }
 
   this.scale.x = (this.facing === 'right' ? -1 : 1);
 
@@ -122,6 +131,7 @@ Player.prototype.defeat = function() {
   this.lockMovement = true;
   this.defeated = true;
   this.animations.play('die');
+  this.knockbackDirection.set(0);
 
   if (this.holding !== undefined) {
     this.holding.kill();

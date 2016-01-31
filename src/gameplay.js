@@ -144,6 +144,19 @@ Gameplay.prototype.update = function()
   }
 
   // collision detection
+  this.game.physics.arcade.collide(this.players, this.players, function (pA, pB) {
+    if (pB.holdingFruit === false)
+    {
+      pA.knockbackDirection = Phaser.Point.subtract(pA.position, pB.position);
+    }
+    
+    if (pA.holdingFruit === false)
+    {
+      pB.knockbackDirection = Phaser.Point.subtract(pB.position, pA.position);
+    }
+    this.game.time.events.add(200, function () { pA.knockbackDirection.set(0); pB.knockbackDirection.set(0); });
+  }, function (pA, pB) { return !(pA.defeated) && !(pB.defeated) && (pA.knockbackDirection.getMagnitude() < 0.01) && (pB.knockbackDirection.getMagnitude() < 0.01); }, this);
+
   this.game.physics.arcade.collide(this.players, this.wallTiles);
   this.game.physics.arcade.overlap(this.players, this.fruits, this.pickUpFruit, this.checkPickUpFruit, this);
   this.game.physics.arcade.overlap(this.players, this.kamis, null, this.playerCollidesKami, this);
