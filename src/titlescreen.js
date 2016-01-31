@@ -1,9 +1,14 @@
 var TitleScreen = function(game) { };
 TitleScreen.prototype.init = function() {
   this.enteredPlayers = [];
+
+  this.slots = null;
 };
 TitleScreen.prototype.create = function() {
-  this.debugSlotsText = this.game.add.text(160, 160, '(no players)', { fill: 'white', font: '64px Arial'});
+
+  this.slots = this.game.add.group();
+  this.slots.x = GAME_SCREEN_WIDTH * 0.15;
+  this.slots.y = GAME_SCREEN_HEIGHT * 0.8;
 
   var spaceKey = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
   spaceKey.onUp.add(function () { this.pushInput(this.game.input.keyboard); }, this);
@@ -72,7 +77,7 @@ TitleScreen.prototype.update = function() {
 };
 
 TitleScreen.prototype.pushInput = function(input) {
-  if (this.enteredPlayers.indexOf(input) !== -1)
+  if (this.enteredPlayers.indexOf(input) !== -1 || this.enteredPlayers.length > 3)
   {
     return;
   }
@@ -81,8 +86,14 @@ TitleScreen.prototype.pushInput = function(input) {
 
   this.game.sound.play('click', 1.2);
 
-  this.debugSlotsText.text = '';
-  this.enteredPlayers.forEach(function (player) { this.debugSlotsText.text += (player instanceof Phaser.Keyboard ? 'Ⓚ' : ['①', '②', '③', '④'][player.index]) + '\n'; }, this);
+  var ind = this.enteredPlayers.length - 1;
+  var slotData = this.game.add.sprite((ind / 4) * (GAME_SCREEN_WIDTH * 0.8), 0, 'charsheet', 51 * ind);
+  this.slots.addChild(slotData);
+  var slotSymbol = this.game.add.text(32, 128, (input instanceof Phaser.Keyboard ? '⌨' : ['①', '②', '③', '④'][input.index]), {fill: 'white', font: '64px Georgia, sans-serif'});
+  slotSymbol.align = 'center';
+  slotSymbol.anchor.set(0.5);
+  slotSymbol.cacheAsBitmap = true;
+  slotData.addChild(slotSymbol);
 };
 TitleScreen.prototype.removeInput = function(input) {
   if (this.enteredPlayers.indexOf(input) === -1)
@@ -90,17 +101,16 @@ TitleScreen.prototype.removeInput = function(input) {
     return;
   }
 
-  this.enteredPlayers.splice(this.enteredPlayers.indexOf(input), 1);
+  var ind = this.enteredPlayers.indexOf(input);
 
-  if (this.enteredPlayers.length === 0)
-  {
-    this.debugSlotsText.text = '(no players)';
-  }
-  else
-  {
-    this.debugSlotsText.text = '';
-    this.enteredPlayers.forEach(function (player) { this.debugSlotsText.text += (player instanceof Phaser.Keyboard ? 'Ⓚ' : ['①', '②', '③', '④'][player.index]) + '\n'; }, this);
-  }
+  this.enteredPlayers.splice(ind, 1);
+
+  this.slots.remove(this.slots.children[ind]);
+
+  this.slots.forEach(function (slot) {
+    slot.frame = (this.slots.children.indexOf(slot) * 51);
+    slot.x = (this.slots.children.indexOf(slot) / 4) * (GAME_SCREEN_WIDTH * 0.8);
+  }, this);
 };
 TitleScreen.prototype.startWithInput = function(input) {
   if (this.enteredPlayers.length < 2 || this.enteredPlayers.indexOf(input) === -1)
