@@ -26,7 +26,7 @@ Promoscreen.prototype.create = function () {
   beginText.align = 'center';
   this.game.time.events.loop(400, function () { beginText.visible = !beginText.visible; }, this);
 
-  var note = this.game.add.text(16, GAME_SCREEN_HEIGHT + UI_BAR_HEIGHT - 24, 'By Rinaldo Wirz, Daniel Savage, and Vega Mukiwa (Thomas O.)', {fill : 'white', font: '16px Georgia, sans-serif'});
+  var note = this.game.add.text(16, GAME_SCREEN_HEIGHT + UI_BAR_HEIGHT - 24, 'By Rinaldo Wirz, Daniel Savage, and Thomas Olsson', {fill : 'white', font: '16px Georgia, sans-serif'});
 };
 Promoscreen.prototype.update = function () {
   //
