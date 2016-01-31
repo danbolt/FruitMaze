@@ -6,6 +6,11 @@ Preload.prototype.preload = function()
   this.game.load.audio('wall0', 'asset/sfx/wall1.ogg');
   this.game.load.audio('wall1', 'asset/sfx/wall2.ogg');
   this.game.load.audio('wall2', 'asset/sfx/wall3.ogg');
+  this.game.load.audio('pick_fruit', 'asset/sfx/pick_fruit.ogg');
+  this.game.load.audio('gift', 'asset/sfx/gift.ogg');
+  this.game.load.audio('death', 'asset/sfx/death.ogg');
+  this.game.load.audio('click', 'asset/sfx/click.ogg');
+  this.game.load.audio('victory', 'asset/sfx/victory.ogg');
 
   this.game.load.image('tiles', 'asset/img/tiles.png');
 
@@ -37,7 +42,6 @@ Preload.prototype.update = function ()
   {
     this.game.state.start('TitleScreen', true, false);
 
-    var bgm = this.game.add.audio('main_theme', 0.25, true);
-    bgm.play();
+    this.game.bgm = this.game.sound.play('main_theme', 0.25, true);
   }
 };

@@ -27,6 +27,8 @@ TitleScreen.prototype.create = function() {
         this.game.scale.startFullScreen(false);
     }
   }, this);
+
+  this.game.bgm.volume = 0.25;
 };
 TitleScreen.prototype.update = function() {
   if (this.game.input.gamepad.pad1.justPressed(Phaser.Gamepad.XBOX360_A)) {
@@ -76,6 +78,8 @@ TitleScreen.prototype.pushInput = function(input) {
   }
 
   this.enteredPlayers.push(input);
+
+  this.game.sound.play('click', 1.2);
 
   this.debugSlotsText.text = '';
   this.enteredPlayers.forEach(function (player) { this.debugSlotsText.text += (player instanceof Phaser.Keyboard ? 'Ⓚ' : ['①', '②', '③', '④'][player.index]) + '\n'; }, this);

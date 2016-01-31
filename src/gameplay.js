@@ -27,17 +27,10 @@ Gameplay.prototype.init = function(playerInputData)
   // UI-related stuff
   this.timeCountdown = null;
 
-  // Sound effect stuff
-  this.wallSoundEffects = [];
 };
 Gameplay.prototype.create = function()
 {
   this.currentState = this.states[0];
-
-  for (var i = 0; i < 3; i++) {
-    var wallSound = this.game.add.sound('wall' + i, 1.2);
-    this.wallSoundEffects.push(wallSound);
-  }
 
   this.players = this.game.add.group();
   this.kamis = this.game.add.group();
@@ -89,7 +82,8 @@ Gameplay.prototype.create = function()
     this.model.refreshMaze();
     this.updateMapCache(true);
 
-    this.wallSoundEffects[~~(Math.random() * this.wallSoundEffects.length)].play();
+    //this.wallSoundEffects[~~(Math.random() * this.wallSoundEffects.length)].play();
+    this.game.sound.play('wall' + ~~(Math.random() * 3), 1.2);
   }, this);
   this.timer.resetTimer();
   this.timer.pauseTimer();
@@ -136,6 +130,7 @@ Gameplay.prototype.create = function()
   var startGameEvent = this.game.time.events.add(1000, function () {
     this.players.forEach(function (p) { p.lockMovement = false; }, this);
     startText.text = 'GO!'
+    this.currentState = this.states[1];
     this.timer.unpauseTimer();
     this.game.time.events.add(750, function () { startText.destroy(); } );
   }, this);
@@ -184,15 +179,26 @@ Gameplay.prototype.spawnFruit = function() {
   }
 };
 Gameplay.prototype.playerWins = function(index) {
-  var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, 'PLAYER ' + (index + 1) + ' WINS!', {fill: 'white', font: '96px Arial'});
-  startText.align = 'center';
-  startText.anchor.x = 0.5;
+  if (this.currentState !== this.states[1]) {
+    return;
+  }
 
-  this.timer.pauseTimer();
-  this.kamis.forEach(function (k) { k.lockMovement = true; }, this);
-  this.players.forEach(function (p) { p.lockMovement = true; }, this);
+  this.currentState = this.states[2];
 
-  this.game.time.events.add(5000, function () { this.game.state.start('TitleScreen'); }, this);
+  this.game.time.events.add(3500, function () {
+    var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, 'PLAYER ' + (index + 1) + ' WINS!', {fill: 'white', font: '96px Arial'});
+    startText.align = 'center';
+    startText.anchor.x = 0.5;
+
+    this.timer.pauseTimer();
+    this.kamis.forEach(function (k) { k.lockMovement = true; }, this);
+    this.players.forEach(function (p) { p.lockMovement = true; }, this);
+
+    this.game.bgm.fadeTo(50, 0.1);
+    this.game.sound.play('victory');
+
+    this.game.time.events.add(5000, function () { this.game.state.start('TitleScreen'); }, this);
+  }, this);
 };
 
 // particle effects for map changes
@@ -233,6 +239,7 @@ Gameplay.prototype.pickUpFruit = function (player, fruit)
   fruit.visible = false;
   player.holding = fruit;
   player.holdFruit();
+  this.game.sound.play('pick_fruit', 1.2);
 };
 Gameplay.prototype.playerCollidesKami = function(player, kami)
 {
@@ -257,9 +264,12 @@ Gameplay.prototype.playerCollidesKami = function(player, kami)
         this.labrynthEmitter.emitParticle(player.x, player.y, 'particles', 2);
       }
       this.labrynthEmitter.lifespan = oldLifespan;
+
+      this.game.sound.play('gift');
     }
   } else {
     player.defeat();
+    this.game.sound.play('death');
   }
 
   return false;
