@@ -14,7 +14,9 @@ Preload.prototype.preload = function()
   this.game.load.audio('drop', 'asset/sfx/drop.ogg');
   this.game.load.audio('bump', 'asset/sfx/bump.ogg');
 
-  this.game.load.image('explanations', 'asset/img/explanations.jpg')
+  this.game.load.image('explanations', 'asset/img/explanations.jpg');
+  this.game.load.image('title_bg', 'asset/img/title_bg.jpg');
+  this.game.load.image('logo', 'asset/img/title1.png');
 
   this.game.load.image('tiles', 'asset/img/tiles.png');
   this.game.load.image('grey_icon', 'asset/img/icone_grey.png');
