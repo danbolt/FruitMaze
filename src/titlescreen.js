@@ -33,7 +33,7 @@ TitleScreen.prototype.create = function() {
     }
   }, this);
 
-  var instructions = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT * 0.65, 'Press Ⓐ to enter\nPress Ⓑ to exit\nPress START when everyone has joined', {fill: 'white', font: '24px Georgia, sans-serif'});
+  var instructions = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT * 0.6, 'Press Ⓐ to enter\nPress Ⓑ to exit\nPress START when everyone has joined', {fill: 'white', font: '24px Georgia, sans-serif'});
   instructions.anchor.x = 0.5;
   instructions.align = 'center';
 
@@ -103,13 +103,14 @@ TitleScreen.prototype.pushInput = function(input) {
   this.game.sound.play('click', 1.2);
 
   var ind = this.enteredPlayers.length - 1;
-  var slotData = this.game.add.sprite((ind / 4) * (GAME_SCREEN_WIDTH * 0.8), 0, 'charsheet', 51 * ind);
+  var slotData = this.game.add.sprite(ind * 180, -48, 'icon', 4 * ind);
   for (var i = 0; i < 4; i++) {
-    slotData.animations.add(i.toString(), [3, 4, 5, 6, 5, 4].map(function (a) { return a + i * 51; }), 12, true);
+    slotData.animations.add(i.toString(), [0, 1, 2, 3].map(function (a) { return a + i * 4; }), 12, true);
   }
   slotData.animations.play(ind.toString());
+  slotData.anchor.x = 0.5;
   this.slots.addChild(slotData);
-  var slotSymbol = this.game.add.text(32, 120, (input instanceof Phaser.Keyboard ? '⌨' : ['①', '②', '③', '④'][input.index]), {fill: 'white', font: '48px Georgia, sans-serif'});
+  var slotSymbol = this.game.add.text(0, 180, (input instanceof Phaser.Keyboard ? '⌨' : ['①', '②', '③', '④'][input.index]), {fill: 'white', font: '48px Georgia, sans-serif'});
   slotSymbol.align = 'center';
   slotSymbol.anchor.set(0.5);
   slotSymbol.cacheAsBitmap = true;
