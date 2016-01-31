@@ -1,11 +1,18 @@
 var KAMI_MOVE_SPEED = 50;
 
 var Kami = function (game, x, y, index) {
-  Phaser.Sprite.call(this, game, x, y, 'tiles_s', 0);
-  this.anchor.set(0.5, 0.5);
+  Phaser.Sprite.call(this, game, x, y, 'kami', 0);
+  this.anchor.set(0.5, 0.7);
+
+  this.scale.set(0.8);
 
   this.game.physics.arcade.enable(this);
-  this.body.setSize(32, 32);
+  this.body.setSize(32 * (1 / this.scale.x), 32 * (1 / this.scale.x));
+
+  this.animations.add('wiggle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].map(function (i) { return i + (index * 20); }), 24, true);
+  this.animations.play('wiggle');
+
+  this.alpha = 0.75;
 
   this.target = new Phaser.Point(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2);
 

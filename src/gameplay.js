@@ -45,7 +45,6 @@ Gameplay.prototype.create = function()
     var kami1 = new Kami(this.game, (i === 0 || i === 3) ? GAME_SCREEN_WIDTH - 256 : 256, (i === 0 || i === 2) ? 192 : GAME_SCREEN_HEIGHT - 192, i);
     this.kamis.addChild(kami1);
     this.kamis.addToHash(kami1);
-    kami1.tint = DEBUG_TINTS[i];
   }
 
   this.fruits = this.game.add.group();
