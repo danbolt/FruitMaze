@@ -12,3 +12,5 @@ var ROOM_WIDTH = 2; // in tiles
 var ROOM_HEIGHT = 2;
 
 var DEBUG_TINTS = [0x0000FF, 0xFF0000, 0xFF77FF, 0x00FF00];
+
+console.log(GAME_SCREEN_HEIGHT * 0.5);

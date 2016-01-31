@@ -10,6 +10,12 @@ TitleScreen.prototype.create = function() {
   this.slots.x = GAME_SCREEN_WIDTH * 0.15;
   this.slots.y = (GAME_SCREEN_HEIGHT + UI_BAR_HEIGHT) * 0.75;
 
+  /*
+  for (var i = 0; i < 4; i++) {
+    var emptySlot = this.game.add.sprite(i * 180, -48, 'grey_icon', 4 * i);
+    emptySlot.alpha = 0.5;
+  }*/
+
   var spaceKey = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
   spaceKey.onUp.add(function () { this.pushInput(this.game.input.keyboard); }, this);
 

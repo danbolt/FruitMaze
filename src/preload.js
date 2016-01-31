@@ -15,6 +15,7 @@ Preload.prototype.preload = function()
   this.game.load.audio('bump', 'asset/sfx/bump.ogg');
 
   this.game.load.image('tiles', 'asset/img/tiles.png');
+  this.game.load.image('grey_icon', 'asset/img/icone_grey.png');
 
   this.game.load.spritesheet('tiles_s', 'asset/img/tiles.png', 32, 32);
   this.game.load.spritesheet('charsheet', 'asset/img/chara_anim_sheet.png', 70, 80);
