@@ -167,6 +167,8 @@ Gameplay.prototype.update = function()
 
   // collision detection
   this.game.physics.arcade.collide(this.players, this.players, function (pA, pB) {
+
+    this.game.sound.play('bump');
     
     if (pA.holdingFruit === true)
     {
@@ -191,6 +193,8 @@ Gameplay.prototype.update = function()
         fallFruit.body.moves = true;
       }, this);
       fruitMoveTween.start();
+
+      this.game.sound.play('drop');
     }
     else
     {
@@ -219,6 +223,8 @@ Gameplay.prototype.update = function()
         fallFruit.body.moves = true;
       }, this);
       fruitMoveTween.start();
+
+      this.game.sound.play('drop');
     }
     else
     {

@@ -11,6 +11,8 @@ Preload.prototype.preload = function()
   this.game.load.audio('death', 'asset/sfx/death.ogg');
   this.game.load.audio('click', 'asset/sfx/click.ogg');
   this.game.load.audio('victory', 'asset/sfx/victory.ogg');
+  this.game.load.audio('drop', 'asset/sfx/drop.ogg');
+  this.game.load.audio('bump', 'asset/sfx/bump.ogg');
 
   this.game.load.image('tiles', 'asset/img/tiles.png');
 
