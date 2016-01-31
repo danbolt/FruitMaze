@@ -105,15 +105,25 @@ Gameplay.prototype.create = function()
 
   this.scores = new GameScores(this.game, this.playerInputData.length, this.playerWins, this);
 
+  console.log(this.scores);
+  console.log(this.timer);
+
   // init UI
-  this.timeCountdown = this.game.add.text(32, GAME_SCREEN_HEIGHT + 32, this.timer.timeLeft, {fill: 'white'});
+  this.timeCountdown = this.game.add.text(32, GAME_SCREEN_HEIGHT + 48, this.timer.timeLeft, {fill: 'white', font: '48px Georgia, Serif'});
+  this.timeCountdown.anchor.y = 0.5;
 
   this.playerScoresUI = this.game.add.group();
   for (var i = 0; i < this.scores.playerCount; i++) {
-    var text = this.game.add.text(256 + i * 172, GAME_SCREEN_HEIGHT + 32, 'P' + (i + 1) + ' SCORE', {fill: 'white'});
+    var text = this.game.add.text(256 + i * 130, GAME_SCREEN_HEIGHT + 48, 'SCORE', {fill: 'white', font: '48px Georgia, Serif'});
+    text.anchor.y = 0.5;
     this.playerScoresUI.addChild(text);
-  }
 
+    var icon = this.game.add.sprite(-32, 0, 'charsheet', i * 51);
+    icon.animations.add('jiggle', [3, 4, 5, 6, 5, 4].map(function (a) { return a + i * 51; }), 12, true);
+    icon.animations.play('jiggle');
+    icon.anchor.set(0.5, 0.5);
+    text.addChild(icon);
+  }
   this.labrynthEmitter = this.game.add.emitter(0, 0, 200);
   this.labrynthEmitter.makeParticles('particles', [0, 1]);
   this.labrynthEmitter.lifespan = 150;
@@ -139,9 +149,9 @@ Gameplay.prototype.create = function()
   }, this);
 
   this.players.forEach(function (p) { p.lockMovement = true; }, this);
-  var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, 'READY?', {fill: 'white', font: '128px Arial'});
+  var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, 'READY?', {fill: 'white', font: '128px Georgia, Serif'});
   startText.align = 'center';
-  startText.anchor.x = 0.5;
+  startText.anchor.set(0.5);
   startText.cacheAsBitmap = true;
   var startGameEvent = this.game.time.events.add(1000, function () {
     this.players.forEach(function (p) { p.lockMovement = false; }, this);
@@ -154,9 +164,9 @@ Gameplay.prototype.create = function()
 Gameplay.prototype.update = function()
 {
   // update UI
-  this.timeCountdown.text = this.timer.timeLeft;
+  this.timeCountdown.text = '⧖' + this.timer.timeLeft;
   for (var i = 0; i < this.scores.playerCount; i++) {
-    this.playerScoresUI.children[i].text = 'P' + (i + 1) + ':' + this.scores.playerScore(i);
+    this.playerScoresUI.children[i].text = this.scores.playerScore(i);
   }
 
   // collision detection
@@ -296,7 +306,7 @@ Gameplay.prototype.playerWins = function(index) {
   if (index === -1) {
     var highestScore = 0;
     for (var i = 0; i < this.scores.scores.length; i++) {
-      highestScore = Math.max(this.scores.scores[i]);
+      highestScore = highestScore < this.scores.scores[i] ? this.scores.scores[i] : highestScore;
     }
 
     var numberOfPlayersWithHighestScore = 0;
@@ -306,6 +316,7 @@ Gameplay.prototype.playerWins = function(index) {
 
     if (numberOfPlayersWithHighestScore <= 1)
     {
+      console.log(numberOfPlayersWithHighestScore +','+highestScore);
       var winnerIndex = -1;
       var winnerPoints = 0;
       for (var i = 0; i < this.scores.scores.length; i++) {
@@ -318,10 +329,10 @@ Gameplay.prototype.playerWins = function(index) {
     }
   }
 
-  this.game.time.events.add(3500, function () {
-    var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, (index === -1 ) ? 'DRAW!' : 'PLAYER ' + (index + 1) + ' WINS!', {fill: 'white', font: '96px Arial'});
+  this.game.time.events.add(2500, function () {
+    var startText = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2, (index === -1 ) ? 'DRAW!' : 'PLAYER ' + (index + 1) + ' WINS!', {fill: 'white', font: '96px Georgia, Serif'});
     startText.align = 'center';
-    startText.anchor.x = 0.5;
+    startText.anchor.set(0.5);
 
     this.timer.pauseTimer();
     this.kamis.forEach(function (k) { k.lockMovement = true; }, this);
