@@ -2,7 +2,7 @@ var KAMI_MOVE_SPEED = 50;
 
 var Kami = function (game, x, y, index) {
   Phaser.Sprite.call(this, game, x, y, 'kami', 0);
-  this.anchor.set(0.5, 0.7);
+  this.anchor.set(0.5, 1);
 
   this.scale.set(0.8);
 
