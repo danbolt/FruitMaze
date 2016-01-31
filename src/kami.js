@@ -20,6 +20,12 @@ var Kami = function (game, x, y, index) {
 
   this.lockMovement = false;
 
+  var shadowSprite = this.game.add.sprite(0, 0, 'shadow');
+  shadowSprite.width = 42;
+  shadowSprite.scale.y = shadowSprite.scale.x;
+  shadowSprite.anchor.set(0.5, 1);
+  this.addChild(shadowSprite);
+
   this.game.add.existing(this);
 };
 Kami.prototype = Object.create(Phaser.Sprite.prototype);
