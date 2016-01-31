@@ -25,7 +25,7 @@ var Player = function(game, x, y, gamepad, index) {
   this.game.physics.arcade.enable(this);
   this.body.setSize(24, 24);
 
-  this.fruitImage = this.game.add.sprite(0, -42, 'tiles_s', 0);
+  this.fruitImage = this.game.add.sprite(0, -42, 'fruit', 1);
   this.fruitImage.anchor.set(0.5);
   this.addChild(this.fruitImage);
 

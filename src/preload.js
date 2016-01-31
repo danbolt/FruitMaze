@@ -20,6 +20,7 @@ Preload.prototype.preload = function()
   this.game.load.spritesheet('charsheet', 'asset/img/chara_anim_sheet.png', 70, 80);
   this.game.load.spritesheet('flame', 'asset/img/flame.png', 32, 64);
   this.game.load.spritesheet('kami', 'asset/img/kami.png', 140, 190);
+  this.game.load.spritesheet('fruit', 'asset/img/fruits.png', 40, 50);
 
   this.game.load.spritesheet('particles', 'asset/img/particles.png', 16, 16);
 };
