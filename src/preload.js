@@ -41,7 +41,7 @@ Preload.prototype.update = function ()
 {
   if (this.game.cache.isSoundDecoded('main_theme'))
   {
-    this.game.state.start('TitleScreen', true, false);
+    this.game.state.start('Promoscreen', true, false);
 
     this.game.bgm = this.game.sound.play('main_theme', 0.25, true);
   }

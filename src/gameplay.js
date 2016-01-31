@@ -105,9 +105,6 @@ Gameplay.prototype.create = function()
 
   this.scores = new GameScores(this.game, this.playerInputData.length, this.playerWins, this);
 
-  console.log(this.scores);
-  console.log(this.timer);
-
   // init UI
   this.timeCountdown = this.game.add.text(32, GAME_SCREEN_HEIGHT + 48, this.timer.timeLeft, {fill: 'white', font: '48px Georgia, Serif'});
   this.timeCountdown.anchor.y = 0.5;
@@ -316,7 +313,6 @@ Gameplay.prototype.playerWins = function(index) {
 
     if (numberOfPlayersWithHighestScore <= 1)
     {
-      console.log(numberOfPlayersWithHighestScore +','+highestScore);
       var winnerIndex = -1;
       var winnerPoints = 0;
       for (var i = 0; i < this.scores.scores.length; i++) {
