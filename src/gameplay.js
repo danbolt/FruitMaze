@@ -92,7 +92,12 @@ Gameplay.prototype.create = function()
     this.model.refreshMaze();
     this.updateMapCache(true);
 
-    //this.wallSoundEffects[~~(Math.random() * this.wallSoundEffects.length)].play();
+    this.flames.forEach(function (f) { f.kill(); }, this);
+    var roll = ~~(Math.random() * 5);
+    for (var i = 0; i < roll; i++) {
+      this.spawnFlame();
+    }
+
     this.game.sound.play('wall' + ~~(Math.random() * 3), 1.2);
   }, this);
   this.timer.resetTimer();
@@ -249,6 +254,23 @@ Gameplay.prototype.spawnFruit = function() {
     newFruit.revive();
     newFruit.x = randX * 32 + 16;
     newFruit.y = randY * 32 + 16;
+  }
+};
+Gameplay.prototype.spawnFlame = function() {
+  var randX = ~~(Math.random() * MAP_WIDTH * 0.8 + MAP_WIDTH * 0.1);
+  var randY = ~~(Math.random() * MAP_HEIGHT * 0.8 + MAP_HEIGHT * 0.1);
+  var randTile = this.map.getTile(randX, randY, this.wallTiles);
+  while (randTile !== null) {
+    randX = ~~(Math.random() * MAP_WIDTH * 0.8 + MAP_WIDTH * 0.1);
+    randY = ~~(Math.random() * MAP_HEIGHT * 0.8 + MAP_HEIGHT * 0.1);
+    randTile = this.map.getTile(randX, randY, this.wallTiles);
+  }
+
+  var newFlame = this.flames.getFirstDead();
+  if (newFlame !== null) {
+    newFlame.revive();
+    newFlame.x = randX * 32 + 16;
+    newFlame.y = randY * 32 + 16;
   }
 };
 Gameplay.prototype.setCleanDestination = function (target) {
