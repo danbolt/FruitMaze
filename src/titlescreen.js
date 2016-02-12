@@ -9,7 +9,8 @@ TitleScreen.prototype.init = function(prevPlayerData) {
     }
   }
 
-  this.slots = null;
+  this.slotGraphics = null;
+  this.emptySlotGraphics = null;
 };
 TitleScreen.prototype.create = function() {
 
@@ -33,9 +34,27 @@ TitleScreen.prototype.create = function() {
   instructions.anchor.x = 0.5;
   instructions.align = 'center';
 
-  console.log(this.enteredPlayerData);
+  this.slotGraphics = this.game.add.group();
+  this.emptySlotGraphics = this.game.add.group();
+  for (var i = 0; i < 4; i++) {
+    var newSlotSprite = this.game.add.sprite(192 * i - 288, 0, 'icon', i * 4);
+    newSlotSprite.animations.add('run', [0, 1, 2, 3, 2, 1].map(function (a) { return a + i * 4; }), 12, true);
+    newSlotSprite.anchor.set(0.5);
+    newSlotSprite.animations.play('run');
+    newSlotSprite.renderable = false;
+    this.slotGraphics.addChild(newSlotSprite);
+
+    var offGraphic = this.game.add.sprite(192 * i - 288, 0, 'grey_icon');
+    offGraphic.anchor.set(0.5);
+    offGraphic.alpha = 0.75;
+    this.emptySlotGraphics.addChild(offGraphic);
+  }
+  this.slotGraphics.x = this.emptySlotGraphics.x = this.game.width / 2;
+  this.slotGraphics.y = this.emptySlotGraphics.y = this.game.height - 128;
 
   this.game.bgm.volume = 0.25;
+
+  this.updateInputGraphics();
 };
 TitleScreen.prototype.update = function() {
   InputHandler.Options.forEach(function (option) {
@@ -82,6 +101,8 @@ TitleScreen.prototype.pushInput = function(inputOption) {
   this.enteredPlayerData[placementIndex] = inputOption;
   this.game.sound.play('click', 1.2);
   this.enteredPlayerCount += 1;
+
+  this.updateInputGraphics();
 };
 TitleScreen.prototype.removeInput = function(inputOption) {
   for (var i = 0; i < 4; i++) {
@@ -89,8 +110,16 @@ TitleScreen.prototype.removeInput = function(inputOption) {
       this.enteredPlayerData[i] = null;
       this.enteredPlayerCount -= 1;
 
+      this.updateInputGraphics();
+
       return;
     }
+  }
+};
+TitleScreen.prototype.updateInputGraphics = function() {
+  for (var i = 0; i < 4; i++) {
+    this.slotGraphics.children[i].renderable = this.enteredPlayerData[i] !== null;
+    this.emptySlotGraphics.children[i].renderable = this.enteredPlayerData[i] == null;
   }
 };
 TitleScreen.prototype.startWithInput = function() {
