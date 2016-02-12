@@ -17,6 +17,19 @@ var InputHandler = function(game, device, up, down, left, right, accept, back, s
   this.icon = icon;
 };
 InputHandler.prototype.isDown = function (value) {
+  if (this.device instanceof Phaser.SinglePad) {
+      switch (value) {
+      case 'up':
+        return this.device.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1;
+      case 'down':
+        return this.device.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1;
+      case 'left':
+        return this.device.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1;
+      case 'right':
+        return this.device.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1;
+    }
+  }
+
   switch (value) {
     case 'up':
       return this.device.isDown(this.upButton);
