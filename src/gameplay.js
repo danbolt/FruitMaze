@@ -370,7 +370,7 @@ Gameplay.prototype.playerWins = function(index) {
     this.game.bgm.fadeTo(50, 0.1);
     this.game.sound.play('victory');
 
-    this.game.time.events.add(5000, function () { this.game.state.start('TitleScreen'); }, this);
+    this.game.time.events.add(5000, function () { this.game.state.start('TitleScreen', true, false, this.playerInputData); }, this);
   }, this);
 };
 

@@ -34,3 +34,4 @@ InputHandler.prototype.isDown = function (value) {
       return false;
   }
 };
+InputHandler.Options = [];
