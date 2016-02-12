@@ -23,7 +23,13 @@ Gameplay.prototype.init = function(playerInputData)
 
   this.playerInputData = playerInputData;
 
-  this.numberOfFruitToSpawn = (playerInputData.length > 2 ? 2 : 1);
+  var enteredPlayerCount = 0;
+  this.playerInputData.forEach(function (d) {
+    if (d !== null) {
+      enteredPlayerCount++;
+    }
+  });
+  this.numberOfFruitToSpawn = (enteredPlayerCount > 2 ? 2 : 1);
 
   // UI-related stuff
   this.timeCountdown = null;
@@ -40,6 +46,8 @@ Gameplay.prototype.create = function()
   this.flames = this.game.add.group();
 
   for (var i = 0; i < this.playerInputData.length; i++) {
+    if (this.playerInputData[i] === null) { continue; }
+
     var player1 = new Player(this.game, (i === 0 || i === 3) ? GAME_SCREEN_WIDTH - 128 : 128, (i === 0 || i === 2) ? 128 : GAME_SCREEN_HEIGHT - 128, this.playerInputData[i], i, undefined);
     this.players.addChild(player1);
     this.players.addToHash(player1);
@@ -128,6 +136,12 @@ Gameplay.prototype.create = function()
     text.addChild(bowl);
 
     text.scale.set(0.9);
+
+    if (this.playerInputData[i] === null) {
+      text.visible = false;
+      icon.renderable = false;
+      bowl.renderable = false;
+    }
   }
   this.labrynthEmitter = this.game.add.emitter(0, 0, 200);
   this.labrynthEmitter.makeParticles('particles', [0, 1]);

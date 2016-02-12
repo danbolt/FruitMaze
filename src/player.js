@@ -29,14 +29,7 @@ var Player = function(game, x, y, gamepad, index) {
   this.fruitImage.anchor.set(0.5);
   this.addChild(this.fruitImage);
 
-  if (gamepad instanceof Phaser.SinglePad)
-  {
-    this.gamepad = gamepad;
-  }
-  else
-  {
-    this.keyboard = gamepad;
-  }
+  this.gamepad = gamepad;
 
   this.index = index;
 
@@ -78,57 +71,30 @@ Player.prototype.directionalMove = function () {
     return;
   }
 
-  if (this.gamepad) {
-    if (this.gamepad.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || this.gamepad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1) {
-      this.body.velocity.x = -1 * PLAYER_MOVE_SPEED;
+  if (this.gamepad.isDown('left')) {
+    this.body.velocity.x = -1 * PLAYER_MOVE_SPEED;
 
-      this.facing = 'left';
-    } else if (this.gamepad.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || this.gamepad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
-      this.body.velocity.x = PLAYER_MOVE_SPEED;
+    this.facing = 'left';
+  } else if (this.gamepad.isDown('right')) {
+    this.body.velocity.x = PLAYER_MOVE_SPEED;
 
-      this.facing = 'right';
-    } else {
-      this.body.velocity.x = 0;
-    }
-
-    if (this.gamepad.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || this.gamepad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
-      this.body.velocity.y = -1 * PLAYER_MOVE_SPEED;
-
-      this.facing = 'up';
-    } else if (this.gamepad.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || this.gamepad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
-      this.body.velocity.y = PLAYER_MOVE_SPEED;
-
-      this.facing = 'down';
-    } else {
-      this.body.velocity.y = 0;
-    }
-    } else if (this.keyboard) {
-      if (this.keyboard.isDown(Phaser.KeyCode.LEFT)) {
-        this.body.velocity.x = -1 * PLAYER_MOVE_SPEED;
-
-        this.facing = 'left';
-      } else if (this.keyboard.isDown(Phaser.KeyCode.RIGHT))
-      {
-        this.body.velocity.x = PLAYER_MOVE_SPEED;
-
-        this.facing = 'right';
-      } else {
-        this.body.velocity.x = 0;
-      }
-
-      if (this.keyboard.isDown(Phaser.KeyCode.UP)) {
-        this.body.velocity.y = -1 * PLAYER_MOVE_SPEED;
-
-        this.facing = 'up';
-      } else if (this.keyboard.isDown(Phaser.KeyCode.DOWN))
-      {
-        this.body.velocity.y = PLAYER_MOVE_SPEED;
-
-        this.facing = 'down';
-      } else {
-        this.body.velocity.y = 0;
-      }
+    this.facing = 'right';
+  } else {
+    this.body.velocity.x = 0;
   }
+
+  if (this.gamepad.isDown('up')) {
+    this.body.velocity.y = -1 * PLAYER_MOVE_SPEED;
+
+    this.facing = 'up';
+  } else if (this.gamepad.isDown('down')) {
+    this.body.velocity.y = PLAYER_MOVE_SPEED;
+
+    this.facing = 'down';
+  } else {
+    this.body.velocity.y = 0;
+  }
+    
 };
 Player.prototype.holdFruit = function() {
   this.holdingFruit = true;

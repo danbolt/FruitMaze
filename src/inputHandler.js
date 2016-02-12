@@ -1,4 +1,4 @@
-var InputHandler = function(game, device, up, down, left, right, accpet, back) {
+var InputHandler = function(game, device, up, down, left, right, accept, back, start) {
   if (device instanceof Phaser.SinglePad || device instanceof Phaser.Keyboard) {
     this.device = device;
   }
@@ -12,6 +12,7 @@ var InputHandler = function(game, device, up, down, left, right, accpet, back) {
   this.rightButton = right;
   this.acceptButton = accept;
   this.backButton = back;
+  this.startButton = start;
 };
 InputHandler.prototype.isDown = function (value) {
   switch (value) {
@@ -27,6 +28,8 @@ InputHandler.prototype.isDown = function (value) {
       return this.device.isDown(this.acceptButton);
     case 'back':
       return this.device.isDown(this.backButton);
+    case 'start':
+      return this.device.isDown(this.startButton);
     default:
       return false;
   }

@@ -1,6 +1,10 @@
 var TitleScreen = function(game) { };
 TitleScreen.prototype.init = function() {
   this.enteredPlayers = [];
+  this.enteredPlayerData = [null, null, null, null];
+  this.enteredPlayerCount = 0;
+
+  this.inputOptions = [];
 
   this.slots = null;
 };
@@ -8,34 +12,14 @@ TitleScreen.prototype.create = function() {
 
   var explanations = this.game.add.sprite(0, 0, 'explanations');
 
-  this.slots = this.game.add.group();
-  this.slots.x = GAME_SCREEN_WIDTH * 0.15;
-  this.slots.y = (GAME_SCREEN_HEIGHT + UI_BAR_HEIGHT) * 0.75;
-
-  this.emtpySlots = this.game.add.group();
-  this.emtpySlots.x = this.slots.x;
-  this.emtpySlots.y = this.slots.y;
-
-  for (var i = 0; i < 4; i++) {
-    var empty = this.game.add.sprite(i * 180, -48, 'grey_icon');
-    empty.anchor.x = 0.5;
-    empty.alpha = 0.5;
-    this.emtpySlots.addChild(empty);
-  }
-
-  this.game.world.sendToBack(this.emtpySlots);
   this.game.world.sendToBack(explanations);
 
-  var spaceKey = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-  spaceKey.onUp.add(function () { this.pushInput(this.game.input.keyboard); }, this);
-
-  var backspaceKey = this.game.input.keyboard.addKey(Phaser.KeyCode.BACKSPACE);
-  backspaceKey.onUp.add(function () { this.removeInput(this.game.input.keyboard); }, this);
-
-  var enterKey = this.game.input.keyboard.addKey(Phaser.KeyCode.ENTER);
-  enterKey.onUp.add(function () {
-    this.startWithInput(this.game.input.keyboard);
+  this.game.input.gamepad.pads.forEach(function (pad) {
+    this.inputOptions.push(new InputHandler(this.game, pad, Phaser.Gamepad.XBOX360_DPAD_UP, Phaser.Gamepad.XBOX360_DPAD_DOWN, Phaser.Gamepad.XBOX360_DPAD_LEFT, Phaser.Gamepad.XBOX360_DPAD_RIGHT, Phaser.Gamepad.XBOX360_A, Phaser.Gamepad.XBOX360_B, Phaser.Gamepad.XBOX360_START));
   }, this);
+
+  this.inputOptions.push(new InputHandler(this.game, this.game.input.keyboard, Phaser.KeyCode.UP, Phaser.KeyCode.DOWN, Phaser.KeyCode.LEFT, Phaser.KeyCode.RIGHT, Phaser.KeyCode.SPACEBAR, Phaser.KeyCode.BACKSPACE, Phaser.KeyCode.ENTER));
+  this.inputOptions.push(new InputHandler(this.game, this.game.input.keyboard, Phaser.KeyCode.W, Phaser.KeyCode.S, Phaser.KeyCode.A, Phaser.KeyCode.D, Phaser.KeyCode.E, Phaser.KeyCode.Q, Phaser.KeyCode.ENTER));
 
   var fullScreenKey = this.game.input.keyboard.addKey(Phaser.KeyCode.F4);
   fullScreenKey.onUp.add(function () {
@@ -56,101 +40,66 @@ TitleScreen.prototype.create = function() {
   this.game.bgm.volume = 0.25;
 };
 TitleScreen.prototype.update = function() {
-  if (this.game.input.gamepad.pad1.justPressed(Phaser.Gamepad.XBOX360_A)) {
-    this.pushInput(this.game.input.gamepad.pad1);
-  }
-  if (this.game.input.gamepad.pad2.justPressed(Phaser.Gamepad.XBOX360_A)) {
-    this.pushInput(this.game.input.gamepad.pad2);
-  }
-  if (this.game.input.gamepad.pad3.justPressed(Phaser.Gamepad.XBOX360_A)) {
-    this.pushInput(this.game.input.gamepad.pad3);
-  }
-  if (this.game.input.gamepad.pad4.justPressed(Phaser.Gamepad.XBOX360_A)) {
-    this.pushInput(this.game.input.gamepad.pad4);
-  }
-
-  if (this.game.input.gamepad.pad1.justPressed(Phaser.Gamepad.XBOX360_B)) {
-    this.removeInput(this.game.input.gamepad.pad1);
-  }
-  if (this.game.input.gamepad.pad2.justPressed(Phaser.Gamepad.XBOX360_B)) {
-    this.removeInput(this.game.input.gamepad.pad2);
-  }
-  if (this.game.input.gamepad.pad3.justPressed(Phaser.Gamepad.XBOX360_B)) {
-    this.removeInput(this.game.input.gamepad.pad3);
-  }
-  if (this.game.input.gamepad.pad4.justPressed(Phaser.Gamepad.XBOX360_B)) {
-    this.removeInput(this.game.input.gamepad.pad4);
-  }
-
-  if (this.game.input.gamepad.pad1.justPressed(Phaser.Gamepad.XBOX360_START)) {
-    this.startWithInput(this.game.input.gamepad.pad1);
-  }
-  if (this.game.input.gamepad.pad2.justPressed(Phaser.Gamepad.XBOX360_START)) {
-    this.startWithInput(this.game.input.gamepad.pad2);
-  }
-  if (this.game.input.gamepad.pad3.justPressed(Phaser.Gamepad.XBOX360_START)) {
-    this.startWithInput(this.game.input.gamepad.pad3);
-  }
-  if (this.game.input.gamepad.pad4.justPressed(Phaser.Gamepad.XBOX360_START)) {
-    this.startWithInput(this.game.input.gamepad.pad4);
-  }
-};
-
-TitleScreen.prototype.pushInput = function(input) {
-  if (this.enteredPlayers.indexOf(input) !== -1 || this.enteredPlayers.length > 3)
-  {
-    return;
-  }
-
-  this.enteredPlayers.push(input);
-
-  this.game.sound.play('click', 1.2);
-
-  var ind = this.enteredPlayers.length - 1;
-  var slotData = this.game.add.sprite(ind * 180, -48, 'icon', 4 * ind);
-  for (var i = 0; i < 4; i++) {
-    slotData.animations.add(i.toString(), [0, 1, 2, 3].map(function (a) { return a + i * 4; }), 12, true);
-  }
-  slotData.animations.play(ind.toString());
-  slotData.anchor.x = 0.5;
-  this.slots.addChild(slotData);
-  var slotSymbol = this.game.add.text(0, 180, (input instanceof Phaser.Keyboard ? '⌨' : ['🎮', '🎮', '🎮', '🎮'][input.index]), {fill: 'white', font: '48px Georgia, sans-serif'});
-  slotSymbol.align = 'center';
-  slotSymbol.anchor.set(0.5);
-  slotSymbol.cacheAsBitmap = true;
-  slotData.addChild(slotSymbol);
-
-  for (var i = 0; i < 4; i++) {
-    this.emtpySlots.children[i].visible = (i >= this.enteredPlayers.length);
-  }
-};
-TitleScreen.prototype.removeInput = function(input) {
-  if (this.enteredPlayers.indexOf(input) === -1)
-  {
-    return;
-  }
-
-  var ind = this.enteredPlayers.indexOf(input);
-
-  this.enteredPlayers.splice(ind, 1);
-
-  this.slots.remove(this.slots.children[ind]);
-
-  this.slots.forEach(function (slot) {
-    slot.frame = (this.slots.children.indexOf(slot) * 51);
-    slot.animations.play((this.slots.children.indexOf(slot)).toString());
-    slot.x = (this.slots.children.indexOf(slot)) * 180;
+  this.inputOptions.forEach(function (option) {
+    if (option.isDown('accept')) {
+      this.pushInput(option);
+    }
   }, this);
 
+  this.inputOptions.forEach(function (option) {
+    if (option.isDown('back')) {
+      this.removeInput(option);
+    }
+  }, this);
+
+  this.inputOptions.forEach(function (option) {
+    if (option.isDown('start')) {
+      if (this.enteredPlayerData.indexOf(option) !== -1) {
+        this.startWithInput();
+      }
+    }
+  }, this);
+};
+
+TitleScreen.prototype.pushInput = function(inputOption) {
+  // don't enter the same player twice
   for (var i = 0; i < 4; i++) {
-    this.emtpySlots.children[i].visible = (i >= this.enteredPlayers.length);
+    if (this.enteredPlayerData[i] === inputOption) {
+      return;
+    }
+  }
+
+  // find an empty spot to place the player
+  var placementIndex = -1;
+  for (var i = 0; i < 4; i++) {
+    if (this.enteredPlayerData[i] === null) {
+      placementIndex = i;
+      break;
+    }
+  }
+  if (placementIndex === -1) {
+    return;
+  }
+
+  this.enteredPlayerData[placementIndex] = inputOption;
+  this.game.sound.play('click', 1.2);
+  this.enteredPlayerCount += 1;
+};
+TitleScreen.prototype.removeInput = function(inputOption) {
+  for (var i = 0; i < 4; i++) {
+    if (this.enteredPlayerData[i] === inputOption) {
+      this.enteredPlayerData[i] = null;
+      this.enteredPlayerCount -= 1;
+
+      return;
+    }
   }
 };
-TitleScreen.prototype.startWithInput = function(input) {
-  if (this.enteredPlayers.length < 2 || this.enteredPlayers.indexOf(input) === -1)
+TitleScreen.prototype.startWithInput = function() {
+  if (this.enteredPlayerCount < 2)
   {
     return;
   }
 
-  this.game.state.start('Gameplay', true, false, this.enteredPlayers);
+  this.game.state.start('Gameplay', true, false, this.enteredPlayerData);
 };

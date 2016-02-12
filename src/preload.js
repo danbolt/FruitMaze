@@ -47,6 +47,7 @@ Preload.prototype.create = function()
   PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST; //for WebGL
 
   this.game.input.gamepad.start();
+  this.game.input.gamepad.pads = [this.game.input.gamepad.pad1, this.game.input.gamepad.pad2, this.game.input.gamepad.pad3, this.game.input.gamepad.pad4];
 };
 Preload.prototype.update = function ()
 {
