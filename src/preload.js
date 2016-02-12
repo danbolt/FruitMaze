@@ -51,11 +51,11 @@ Preload.prototype.create = function()
 
 
   this.game.input.gamepad.pads.forEach(function (pad) {
-    InputHandler.Options.push(new InputHandler(this.game, pad, Phaser.Gamepad.XBOX360_DPAD_UP, Phaser.Gamepad.XBOX360_DPAD_DOWN, Phaser.Gamepad.XBOX360_DPAD_LEFT, Phaser.Gamepad.XBOX360_DPAD_RIGHT, Phaser.Gamepad.XBOX360_A, Phaser.Gamepad.XBOX360_B, Phaser.Gamepad.XBOX360_START));
+    InputHandler.Options.push(new InputHandler(this.game, pad, Phaser.Gamepad.XBOX360_DPAD_UP, Phaser.Gamepad.XBOX360_DPAD_DOWN, Phaser.Gamepad.XBOX360_DPAD_LEFT, Phaser.Gamepad.XBOX360_DPAD_RIGHT, Phaser.Gamepad.XBOX360_A, Phaser.Gamepad.XBOX360_B, Phaser.Gamepad.XBOX360_START, '🎮'));
   }, this);
 
-  InputHandler.Options.push(new InputHandler(this.game, this.game.input.keyboard, Phaser.KeyCode.UP, Phaser.KeyCode.DOWN, Phaser.KeyCode.LEFT, Phaser.KeyCode.RIGHT, Phaser.KeyCode.SPACEBAR, Phaser.KeyCode.ESC, Phaser.KeyCode.ENTER));
-  InputHandler.Options.push(new InputHandler(this.game, this.game.input.keyboard, Phaser.KeyCode.W, Phaser.KeyCode.S, Phaser.KeyCode.A, Phaser.KeyCode.D, Phaser.KeyCode.E, Phaser.KeyCode.Q, Phaser.KeyCode.ENTER));
+  InputHandler.Options.push(new InputHandler(this.game, this.game.input.keyboard, Phaser.KeyCode.UP, Phaser.KeyCode.DOWN, Phaser.KeyCode.LEFT, Phaser.KeyCode.RIGHT, Phaser.KeyCode.SPACEBAR, Phaser.KeyCode.ESC, Phaser.KeyCode.ENTER, '←↑↓→'));
+  InputHandler.Options.push(new InputHandler(this.game, this.game.input.keyboard, Phaser.KeyCode.W, Phaser.KeyCode.S, Phaser.KeyCode.A, Phaser.KeyCode.D, Phaser.KeyCode.E, Phaser.KeyCode.Q, Phaser.KeyCode.ENTER, 'WASD'));
 };
 Preload.prototype.update = function ()
 {

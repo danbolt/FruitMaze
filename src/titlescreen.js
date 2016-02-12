@@ -30,7 +30,7 @@ TitleScreen.prototype.create = function() {
     }
   }, this);
 
-  var instructions = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT * 0.6, 'Press Ⓐ/SPACE/Q to enter\nPress Ⓑ/ESC/Q to exit\nPress START/ENTER when everyone has joined', {fill: 'white', font: '24px Georgia, sans-serif'});
+  var instructions = this.game.add.text(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT * 0.6, 'Press Ⓐ/SPACE/E to enter\nPress Ⓑ/ESC/Q to exit\nPress START/ENTER when everyone has joined', {fill: 'white', font: '24px Georgia, sans-serif'});
   instructions.anchor.x = 0.5;
   instructions.align = 'center';
 
@@ -44,13 +44,18 @@ TitleScreen.prototype.create = function() {
     newSlotSprite.renderable = false;
     this.slotGraphics.addChild(newSlotSprite);
 
+    var slotText = this.game.add.text(0, 64, 'FOO', {font: '32px Georgia', fill: 'white'});
+    slotText.anchor.x = 0.5;
+    slotText.align = 'center';
+    newSlotSprite.addChild(slotText);
+
     var offGraphic = this.game.add.sprite(192 * i - 288, 0, 'grey_icon');
     offGraphic.anchor.set(0.5);
     offGraphic.alpha = 0.75;
     this.emptySlotGraphics.addChild(offGraphic);
   }
   this.slotGraphics.x = this.emptySlotGraphics.x = this.game.width / 2;
-  this.slotGraphics.y = this.emptySlotGraphics.y = this.game.height - 128;
+  this.slotGraphics.y = this.emptySlotGraphics.y = this.game.height - 150;
 
   this.game.bgm.volume = 0.25;
 
@@ -101,6 +106,8 @@ TitleScreen.prototype.pushInput = function(inputOption) {
   this.enteredPlayerData[placementIndex] = inputOption;
   this.game.sound.play('click', 1.2);
   this.enteredPlayerCount += 1;
+  this.slotGraphics.children[placementIndex].children[0].text = inputOption.icon;
+  this.slotGraphics.children[placementIndex].children[0].fontSize = (inputOption.device instanceof Phaser.SinglePad) ? '64px' : '32px';
 
   this.updateInputGraphics();
 };
