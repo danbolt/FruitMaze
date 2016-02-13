@@ -26,7 +26,7 @@ InputHandler.prototype.isDown = function (value) {
       case 'left':
         return this.device.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1;
       case 'right':
-        return this.device.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1;
+        return this.device.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1;
     }
   }
 
